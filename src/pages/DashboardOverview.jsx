@@ -24,9 +24,9 @@ import {
 // Data is now dynamic
 
 const StatCard = ({ title, value, icon, trend, trendValue }) => (
-  <div className="p-6 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all">
+  <div className="p-6 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all">
     <div className="flex justify-between items-start mb-4">
-      <div className="p-3 rounded-2xl bg-primary-50 text-primary-600">
+      <div className="p-3 rounded-2xl bg-primary-50 dark:bg-primary-500/10 text-primary-600">
         {icon}
       </div>
       <div className={`flex items-center gap-1 text-xs font-bold ${trend === 'up' ? 'text-emerald-500' : 'text-rose-500'}`}>
@@ -35,7 +35,7 @@ const StatCard = ({ title, value, icon, trend, trendValue }) => (
       </div>
     </div>
     <h3 className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">{title}</h3>
-    <p className="text-3xl font-black text-slate-900">{value}</p>
+    <p className="text-3xl font-black text-slate-900 dark:text-white">{value}</p>
   </div>
 );
 
@@ -134,7 +134,7 @@ const DashboardOverview = () => {
   }, []);
 
   return (
-    <div className="p-8 ml-72 bg-slate-50 min-h-screen font-outfit">
+    <div className="p-8 bg-slate-50 dark:bg-slate-800/50 min-h-screen font-outfit">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard 
           title="Total Employees" 
@@ -167,8 +167,8 @@ const DashboardOverview = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <div className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm h-[400px]">
-          <h3 className="text-xl font-bold mb-6 text-slate-800">Weekly Attendance Trend</h3>
+        <div className="p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm h-[400px]">
+          <h3 className="text-xl font-bold mb-6 text-slate-800 dark:text-slate-200">Weekly Attendance Trend</h3>
           <ResponsiveContainer width="100%" height="85%">
             <AreaChart data={weeklyData}>
               <defs>
@@ -189,8 +189,8 @@ const DashboardOverview = () => {
           </ResponsiveContainer>
         </div>
 
-        <div className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm h-[400px]">
-          <h3 className="text-xl font-bold mb-6 text-slate-800">Attendance by Department (Today)</h3>
+        <div className="p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm h-[400px]">
+          <h3 className="text-xl font-bold mb-6 text-slate-800 dark:text-slate-200">Attendance by Department (Today)</h3>
           <ResponsiveContainer width="100%" height="85%">
             {deptData.length > 0 ? (
               <BarChart data={deptData}>
@@ -210,12 +210,12 @@ const DashboardOverview = () => {
         </div>
       </div>
 
-      <div className="p-8 rounded-[2.5rem] bg-white border border-slate-100 shadow-sm">
-        <h3 className="text-xl font-bold mb-6 text-slate-800">Recent Logins</h3>
+      <div className="p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
+        <h3 className="text-xl font-bold mb-6 text-slate-800 dark:text-slate-200">Recent Logins</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-left">
             <thead>
-              <tr className="text-slate-400 text-xs font-bold uppercase tracking-widest border-b border-slate-100">
+              <tr className="text-slate-400 text-xs font-bold uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">
                 <th className="pb-4">Employee</th>
                 <th className="pb-4">Time</th>
                 <th className="pb-4">Status</th>
@@ -224,14 +224,14 @@ const DashboardOverview = () => {
             </thead>
             <tbody className="divide-y divide-slate-50">
               {recentLogins.length > 0 ? recentLogins.map((row, i) => (
-                <tr key={i} className="hover:bg-slate-50 transition-colors group">
+                <tr key={i} className="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors group">
                   <td className="py-5">
-                    <span className="font-bold text-slate-800">{row.name}</span>
+                    <span className="font-bold text-slate-800 dark:text-slate-200">{row.name}</span>
                   </td>
                   <td className="py-5 text-slate-500 font-medium">{row.time}</td>
                   <td className="py-5">
                     <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                      row.status === 'Present' || row.status === 'On Time' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'
+                      row.status === 'Present' || row.status === 'On Time' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 'bg-amber-50 dark:bg-amber-500/10 text-amber-600'
                     }`}>
                       {row.status}
                     </span>

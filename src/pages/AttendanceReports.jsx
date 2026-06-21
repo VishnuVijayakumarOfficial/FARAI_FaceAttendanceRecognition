@@ -91,17 +91,17 @@ const AttendanceReports = () => {
   };
 
   return (
-    <div className="p-8 ml-72 bg-slate-50 min-h-screen font-outfit">
+    <div className="p-8 bg-slate-50 dark:bg-slate-800/50 min-h-screen font-outfit">
 
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
         <div>
-          <h2 className="text-3xl font-black text-slate-900">Attendance Reports</h2>
+          <h2 className="text-3xl font-black text-slate-900 dark:text-white">Attendance Reports</h2>
           <p className="text-slate-500 font-medium">Monitor and export daily attendance logs</p>
         </div>
         <button
           onClick={exportCSV}
-          className="flex items-center gap-2 px-6 py-3.5 bg-emerald-500 text-white rounded-2xl font-black hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20 active:scale-95"
+          className="flex items-center gap-2 px-6 py-3.5 bg-emerald-50 dark:bg-emerald-500/100 text-white rounded-2xl font-black hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20 active:scale-95"
         >
           <FileSpreadsheet size={20} />
           Export CSV
@@ -110,31 +110,31 @@ const AttendanceReports = () => {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-primary-50 flex items-center justify-center flex-shrink-0">
+        <div className="p-6 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-primary-50 dark:bg-primary-500/10 flex items-center justify-center flex-shrink-0">
             <UserCheck size={28} className="text-primary-500" />
           </div>
           <div>
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Present</p>
-            <p className="text-4xl font-black text-slate-900">{loading ? '...' : presentCount}</p>
+            <p className="text-4xl font-black text-slate-900 dark:text-white">{loading ? '...' : presentCount}</p>
           </div>
         </div>
-        <div className="p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center flex-shrink-0">
+        <div className="p-6 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center flex-shrink-0">
             <UserX size={28} className="text-rose-500" />
           </div>
           <div>
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Absent</p>
-            <p className="text-4xl font-black text-slate-900">{loading ? '...' : absentCount}</p>
+            <p className="text-4xl font-black text-slate-900 dark:text-white">{loading ? '...' : absentCount}</p>
           </div>
         </div>
-        <div className="p-6 bg-white rounded-[2rem] border border-slate-100 shadow-sm flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center flex-shrink-0">
+        <div className="p-6 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center flex-shrink-0">
             <ScanFace size={28} className="text-amber-500" />
           </div>
           <div>
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Attendance Rate</p>
-            <p className="text-4xl font-black text-slate-900">
+            <p className="text-4xl font-black text-slate-900 dark:text-white">
               {loading || allEmployees.length === 0 ? '...' : `${Math.round((presentCount / allEmployees.length) * 100)}%`}
             </p>
           </div>
@@ -147,7 +147,7 @@ const AttendanceReports = () => {
           <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
           <input
             type="date"
-            className="input-field pl-12 bg-white"
+            className="input-field pl-12 bg-white dark:bg-slate-900"
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
           />
@@ -157,7 +157,7 @@ const AttendanceReports = () => {
           <input
             type="text"
             placeholder="Search by name, ID or department..."
-            className="input-field pl-12 bg-white"
+            className="input-field pl-12 bg-white dark:bg-slate-900"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -169,8 +169,8 @@ const AttendanceReports = () => {
               onClick={() => setStatusFilter(s)}
               className={`px-5 py-3 rounded-xl font-black text-sm transition-all border ${
                 statusFilter === s
-                  ? 'bg-primary-500 text-white border-primary-500 shadow-lg shadow-primary-500/20'
-                  : 'bg-white text-slate-500 border-slate-200 hover:bg-slate-50'
+                  ? 'bg-primary-50 dark:bg-primary-500/100 text-white border-primary-500 shadow-lg shadow-primary-500/20'
+                  : 'bg-white dark:bg-slate-900 text-slate-500 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:bg-slate-800/50'
               }`}
             >
               {s}
@@ -180,10 +180,10 @@ const AttendanceReports = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-[2rem] border border-slate-100 shadow-xl overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-slate-50 text-slate-400 text-xs font-bold uppercase tracking-widest border-b border-slate-100">
+            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-400 text-xs font-bold uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">
               <tr>
                 <th className="px-8 py-5">Employee</th>
                 <th className="px-8 py-5">ID</th>
@@ -207,7 +207,7 @@ const AttendanceReports = () => {
                   </td>
                 </tr>
               ) : filtered.map((rec) => (
-                <tr key={rec.id} className="hover:bg-slate-50 transition-all">
+                <tr key={rec.id} className="hover:bg-slate-50 dark:bg-slate-800/50 transition-all">
                   {/* Employee */}
                   <td className="px-8 py-5">
                     <div className="flex items-center gap-3">
@@ -221,7 +221,7 @@ const AttendanceReports = () => {
                         </div>
                       )}
                       <div>
-                        <p className="font-black text-slate-800">{rec.name}</p>
+                        <p className="font-black text-slate-800 dark:text-slate-200">{rec.name}</p>
                         <p className="text-xs text-slate-400 font-medium">{rec.designation}</p>
                       </div>
                     </div>
@@ -232,12 +232,12 @@ const AttendanceReports = () => {
                   </td>
                   {/* Department */}
                   <td className="px-8 py-5">
-                    <span className="font-bold text-slate-700">{rec.department}</span>
+                    <span className="font-bold text-slate-700 dark:text-slate-300">{rec.department}</span>
                   </td>
                   {/* Login Time */}
                   <td className="px-8 py-5">
                     {rec.login_time ? (
-                      <div className="flex items-center gap-2 text-slate-600 font-bold text-sm">
+                      <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 font-bold text-sm">
                         <Clock size={14} className="text-primary-500" />
                         {new Date(rec.login_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
@@ -248,7 +248,7 @@ const AttendanceReports = () => {
                   {/* Face AI */}
                   <td className="px-8 py-5">
                     <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
-                      rec.face_descriptor ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-500'
+                      rec.face_descriptor ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-500'
                     }`}>
                       <ScanFace size={11} />
                       {rec.face_descriptor ? 'Registered' : 'Not Set'}
@@ -258,8 +258,8 @@ const AttendanceReports = () => {
                   <td className="px-8 py-5">
                     <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
                       rec.status === 'Present'
-                        ? 'bg-emerald-50 text-emerald-600'
-                        : 'bg-rose-50 text-rose-500'
+                        ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600'
+                        : 'bg-rose-50 dark:bg-rose-500/10 text-rose-500'
                     }`}>
                       {rec.status === 'Present' ? <UserCheck size={11} /> : <UserX size={11} />}
                       {rec.status}
@@ -273,7 +273,7 @@ const AttendanceReports = () => {
 
         {/* Footer summary */}
         {!loading && (
-          <div className="px-8 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+          <div className="px-8 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
             <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
               Showing {filtered.length} of {allEmployees.length} employees
             </p>

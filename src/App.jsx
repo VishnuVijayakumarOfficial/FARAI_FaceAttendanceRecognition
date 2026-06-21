@@ -5,7 +5,6 @@ import { useAuth } from './hooks/useAuth';
 // Pages (will create these next)
 import Home from './pages/Home';
 import AdminLogin from './pages/AdminLogin';
-import AdminRegister from './pages/AdminRegister';
 import AdminDashboard from './pages/AdminDashboard';
 import EmployeeLogin from './pages/EmployeeLogin';
 import EmployeeRegistration from './pages/EmployeeRegistration';
@@ -37,7 +36,6 @@ function App() {
             
             {/* Admin Routes */}
             <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/register" element={<AdminRegister />} />
             <Route 
               path="/admin/dashboard/*" 
               element={

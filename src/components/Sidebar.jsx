@@ -20,13 +20,13 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-72 h-screen bg-white border-r border-slate-100 flex flex-col fixed left-0 top-0 z-20 font-outfit">
+    <div className="w-72 h-screen bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 flex flex-col fixed left-0 top-0 z-20 font-outfit">
       <div className="p-8 flex items-center gap-3">
         <div className="w-10 h-10 rounded-xl bg-primary-500 flex items-center justify-center shadow-lg shadow-primary-500/20">
           <ShieldCheck className="text-white" size={24} />
         </div>
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900">NexWork</h2>
+          <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">NexWork</h2>
           <p className="text-[10px] text-primary-600 font-bold tracking-widest uppercase">Admin Panel</p>
         </div>
       </div>
@@ -40,8 +40,8 @@ const Sidebar = () => {
             className={({ isActive }) => `
               flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
               ${isActive 
-                ? 'bg-primary-50 text-primary-600 font-bold' 
-                : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'}
+                ? 'bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50'}
             `}
           >
             {item.icon}
@@ -53,7 +53,7 @@ const Sidebar = () => {
       <div className="p-4 mt-auto">
         <button
           onClick={signOut}
-          className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-slate-500 hover:text-red-600 hover:bg-red-50 transition-all duration-300 font-bold"
+          className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all duration-300 font-bold"
         >
           <LogOut size={22} />
           <span>Sign Out</span>

@@ -157,16 +157,16 @@ const EmployeeManagement = () => {
   );
 
   return (
-    <div className="p-8 ml-72 bg-slate-50 min-h-screen font-outfit">
+    <div className="p-8 bg-slate-50 dark:bg-slate-800/50 min-h-screen font-outfit">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
         <div>
-          <h2 className="text-3xl font-bold text-slate-900">Employee Directory</h2>
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">Employee Directory</h2>
           <p className="text-slate-500 font-medium">Manage and monitor your team member profiles</p>
         </div>
         <div className="flex items-center gap-3">
           <button 
             onClick={fetchEmployees}
-            className="flex items-center gap-2 px-5 py-3.5 rounded-2xl border border-slate-200 bg-white text-slate-600 font-bold hover:bg-slate-50 transition-all shadow-sm"
+            className="flex items-center gap-2 px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 font-bold hover:bg-slate-50 dark:bg-slate-800/50 transition-all shadow-sm"
             title="Refresh to see latest face registrations"
           >
             <RefreshCw size={18} />
@@ -188,21 +188,21 @@ const EmployeeManagement = () => {
           <input
             type="text"
             placeholder="Search by name, ID or department..."
-            className="input-field pl-12 bg-white"
+            className="input-field pl-12 bg-white dark:bg-slate-900"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <button className="px-6 py-3 rounded-xl border border-slate-200 bg-white flex items-center gap-2 hover:bg-slate-50 transition-colors font-bold text-slate-600 shadow-sm">
+        <button className="px-6 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 flex items-center gap-2 hover:bg-slate-50 dark:bg-slate-800/50 transition-colors font-bold text-slate-600 dark:text-slate-400 shadow-sm">
           <Filter size={20} />
           <span>Filter List</span>
         </button>
       </div>
 
-      <div className="bg-white rounded-[2rem] border border-slate-100 shadow-xl overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left">
-            <thead className="bg-slate-50 text-slate-400 text-xs font-bold uppercase tracking-widest border-b border-slate-100">
+            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-400 text-xs font-bold uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">
               <tr>
                 <th className="px-8 py-5">Employee</th>
                 <th className="px-8 py-5">ID</th>
@@ -221,7 +221,7 @@ const EmployeeManagement = () => {
                   </td>
                 </tr>
               ) : filteredEmployees.map((emp) => (
-                <tr key={emp.id} className="hover:bg-slate-50 transition-all group">
+                <tr key={emp.id} className="hover:bg-slate-50 dark:bg-slate-800/50 transition-all group">
                   <td className="px-8 py-5">
                     <div className="flex items-center gap-3">
                       {emp.face_image ? (
@@ -234,7 +234,7 @@ const EmployeeManagement = () => {
                         </div>
                       )}
                       <div>
-                        <p className="font-bold text-slate-800">{emp.name}</p>
+                        <p className="font-bold text-slate-800 dark:text-slate-200">{emp.name}</p>
                         <p className="text-xs text-slate-400 font-medium">{emp.email}</p>
                       </div>
                     </div>
@@ -244,7 +244,7 @@ const EmployeeManagement = () => {
                   </td>
                   <td className="px-8 py-5">
                     <div>
-                      <p className="text-slate-700 font-bold">{emp.department}</p>
+                      <p className="text-slate-700 dark:text-slate-300 font-bold">{emp.department}</p>
                       <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{emp.designation}</p>
                     </div>
                   </td>
@@ -256,14 +256,14 @@ const EmployeeManagement = () => {
                   </td>
                   <td className="px-8 py-5">
                     <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
-                      emp.todayStatus === 'Present' ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'
+                      emp.todayStatus === 'Present' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-600'
                     }`}>
                       {emp.todayStatus === 'Present' ? 'Present Today' : 'Not Logged In'}
                     </div>
                   </td>
                   <td className="px-8 py-5">
                     <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
-                      emp.face_descriptor ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'
+                      emp.face_descriptor ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-600'
                     }`}>
                       <CheckCircle2 size={12} />
                       {emp.face_descriptor ? 'Face Logged' : 'Not Registered'}
@@ -272,7 +272,7 @@ const EmployeeManagement = () => {
                   <td className="px-8 py-5 text-right">
                     <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button onClick={() => handleEditEmployee(emp)} className="p-2.5 hover:bg-slate-100 text-slate-500 rounded-xl transition-all"><Edit2 size={18} /></button>
-                      <button onClick={() => handleDeleteEmployee(emp.id)} className="p-2.5 hover:bg-rose-50 text-rose-500 rounded-xl transition-all"><Trash2 size={18} /></button>
+                      <button onClick={() => handleDeleteEmployee(emp.id)} className="p-2.5 hover:bg-rose-50 dark:bg-rose-500/10 text-rose-500 rounded-xl transition-all"><Trash2 size={18} /></button>
                     </div>
                   </td>
                 </tr>
@@ -284,29 +284,29 @@ const EmployeeManagement = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-slate-900/40 backdrop-blur-sm animate-in fade-in duration-300">
-          <div className="w-full max-w-2xl bg-white rounded-[3rem] overflow-hidden shadow-2xl border border-slate-100 scale-100 animate-in zoom-in duration-300">
-            <div className="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-              <h3 className="text-2xl font-bold text-slate-900">{editingId ? 'Edit Employee' : 'Register New Employee'}</h3>
-              <button onClick={() => { setIsModalOpen(false); setEditingId(null); setFormData({ name: '', email: '', employee_id: '', department: '', designation: '', password: '', attendance_start_time: '09:00', attendance_end_time: '10:00' }); }} className="p-2 hover:bg-white rounded-xl text-slate-400 hover:text-slate-900 transition-all shadow-sm">
+          <div className="w-full max-w-2xl bg-white dark:bg-slate-900 rounded-[3rem] overflow-hidden shadow-2xl border border-slate-100 dark:border-slate-800 scale-100 animate-in zoom-in duration-300">
+            <div className="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50/50">
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{editingId ? 'Edit Employee' : 'Register New Employee'}</h3>
+              <button onClick={() => { setIsModalOpen(false); setEditingId(null); setFormData({ name: '', email: '', employee_id: '', department: '', designation: '', password: '', attendance_start_time: '09:00', attendance_end_time: '10:00' }); }} className="p-2 hover:bg-white dark:bg-slate-900 rounded-xl text-slate-400 hover:text-slate-900 dark:text-white transition-all shadow-sm">
                 <X size={24} />
               </button>
             </div>
             <form onSubmit={handleAddEmployee} className="p-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700 ml-1">Full Name</label>
+                  <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Full Name</label>
                   <input required className="input-field" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="Full Name" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700 ml-1">Employee ID</label>
+                  <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Employee ID</label>
                   <input required className="input-field" value={formData.employee_id} onChange={(e) => setFormData({...formData, employee_id: e.target.value})} placeholder="EMP-001" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700 ml-1">Work Email</label>
+                  <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Work Email</label>
                   <input required type="email" className="input-field" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="email@company.com" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700 ml-1">Department</label>
+                  <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Department</label>
                   <select className="input-field appearance-none bg-no-repeat bg-right-4" style={{backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%2364748b\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'/%3E%3C/svg%3E")'}} value={formData.department} onChange={(e) => setFormData({...formData, department: e.target.value})}>
                     <option value="">Select Department</option>
                     <option value="IT">IT & Engineering</option>
@@ -316,23 +316,23 @@ const EmployeeManagement = () => {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700 ml-1">Temporary Password</label>
+                  <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Temporary Password</label>
                   <input required type="password" title="This password must be used to create the auth user manually" className="input-field" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} placeholder="••••••••" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700 ml-1">Attendance Start Time</label>
+                  <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Attendance Start Time</label>
                   <input type="time" className="input-field" value={formData.attendance_start_time} onChange={(e) => setFormData({...formData, attendance_start_time: e.target.value})} />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-slate-700 ml-1">Attendance End Time</label>
+                  <label className="text-sm font-bold text-slate-700 dark:text-slate-300 ml-1">Attendance End Time</label>
                   <input type="time" className="input-field" value={formData.attendance_end_time} onChange={(e) => setFormData({...formData, attendance_end_time: e.target.value})} />
                 </div>
               </div>
-              <p className="mt-4 text-[11px] text-amber-600 font-bold bg-amber-50 p-3 rounded-xl border border-amber-100 italic">
+              <p className="mt-4 text-[11px] text-amber-600 font-bold bg-amber-50 dark:bg-amber-500/10 p-3 rounded-xl border border-amber-100 italic">
                 * After creating the employee here, you must manually create an account with this email/password in the Supabase Auth dashboard to enable login.
               </p>
               <div className="mt-12 flex gap-4">
-                <button type="button" onClick={() => { setIsModalOpen(false); setEditingId(null); setFormData({ name: '', email: '', employee_id: '', department: '', designation: '', password: '', attendance_start_time: '09:00', attendance_end_time: '10:00' }); }} className="flex-1 px-6 py-4 rounded-2xl border-2 border-slate-100 font-bold text-slate-600 hover:bg-slate-50 transition-all">Cancel</button>
+                <button type="button" onClick={() => { setIsModalOpen(false); setEditingId(null); setFormData({ name: '', email: '', employee_id: '', department: '', designation: '', password: '', attendance_start_time: '09:00', attendance_end_time: '10:00' }); }} className="flex-1 px-6 py-4 rounded-2xl border-2 border-slate-100 dark:border-slate-800 font-bold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:bg-slate-800/50 transition-all">Cancel</button>
                 <button type="submit" disabled={loading} className="flex-[2] btn-primary py-4 text-lg">{editingId ? 'Update Account' : 'Create Account'}</button>
               </div>
             </form>

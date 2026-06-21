@@ -19,16 +19,16 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="flex bg-slate-950 min-h-screen">
+    <div className="flex bg-slate-50 dark:bg-slate-950 min-h-screen">
       <Sidebar />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col ml-72">
         <TopBar title={getTitle()} />
         <main className="flex-1 overflow-y-auto">
           <Routes>
             <Route index element={<DashboardOverview />} />
             <Route path="employees" element={<EmployeeManagement />} />
             <Route path="attendance" element={<AttendanceReports />} />
-            <Route path="settings" element={<div className="p-8 ml-72">Settings Page coming soon...</div>} />
+            <Route path="settings" element={<div className="p-8 dark:text-white">Settings Page coming soon...</div>} />
           </Routes>
         </main>
       </div>

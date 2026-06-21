@@ -6,9 +6,9 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light;
-  color: #1e293b;
-  background-color: #f8fafc;
+  color-scheme: dark;
+  color: #e2e8f0;
+  background-color: #030712;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -21,6 +21,7 @@ body {
   display: block;
   min-width: 320px;
   min-height: 100vh;
+  background-color: #030712;
 }
 
 #root {
@@ -28,25 +29,25 @@ body {
 }
 
 .card-shadow {
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
 }
 
 .feature-dot {
-  background-image: radial-gradient(#e2e8f0 2px, transparent 0);
+  background-image: radial-gradient(#1e293b 2px, transparent 0);
   background-size: 20px 20px;
 }
 
 @layer components {
   .btn-primary {
-    @apply px-6 py-2.5 bg-primary-500 hover:bg-primary-600 text-white rounded-xl transition-all duration-300 font-bold shadow-lg shadow-primary-500/20 active:scale-95;
+    @apply px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl transition-all duration-300 font-bold shadow-lg shadow-emerald-500/20 active:scale-95;
   }
   
   .btn-outline {
-    @apply px-6 py-2.5 border-2 border-slate-200 hover:border-primary-500 hover:text-primary-500 text-slate-600 rounded-xl transition-all duration-300 font-bold active:scale-95;
+    @apply px-6 py-2.5 border-2 border-white/10 hover:border-emerald-500 hover:text-emerald-500 text-slate-300 rounded-xl transition-all duration-300 font-bold active:scale-95;
   }
 
   .input-field {
-    @apply w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-all text-slate-900 placeholder-slate-400;
+    @apply w-full px-4 py-3 bg-[#0B1120] border border-white/10 rounded-xl focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-white placeholder-slate-500;
   }
 }
 
@@ -56,14 +57,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f5f9;
+  background: #030712;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: #1e293b;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+  background: #334155;
 }
