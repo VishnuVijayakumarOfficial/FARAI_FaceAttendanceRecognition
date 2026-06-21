@@ -13,7 +13,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from './hooks/useAuth';
 
 const EmployeeManagement = () => {
   useAuth();
@@ -65,7 +65,10 @@ const EmployeeManagement = () => {
   };
 
   useEffect(() => {
-    fetchEmployees();
+    const init = async () => {
+      await fetchEmployees();
+    };
+    init();
   }, []);
 
   const handleAddEmployee = async (e) => {

@@ -1,4 +1,4 @@
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from './hooks/useAuth';
 import { Bell, Search, User } from 'lucide-react';
 
 const TopBar = ({ title }) => {
