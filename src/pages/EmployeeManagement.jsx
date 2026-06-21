@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { 
-  Plus, 
   Search, 
-  Mail, 
   Trash2, 
   Edit2, 
-  MoreVertical, 
   Filter,
   UserPlus,
   Loader2,
@@ -19,7 +16,7 @@ import {
 import { useAuth } from '../context/AuthContext';
 
 const EmployeeManagement = () => {
-  const { user } = useAuth();
+  useAuth();
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -36,10 +33,6 @@ const EmployeeManagement = () => {
     attendance_start_time: '09:00',
     attendance_end_time: '10:00'
   });
-
-  useEffect(() => {
-    fetchEmployees();
-  }, []);
 
   const fetchEmployees = async () => {
     setLoading(true);
@@ -71,12 +64,16 @@ const EmployeeManagement = () => {
     setLoading(false);
   };
 
+  useEffect(() => {
+    fetchEmployees();
+  }, []);
+
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     setLoading(true);
     
     if (editingId) {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('employees')
         .update(formData)
         .eq('id', editingId);
@@ -99,7 +96,7 @@ const EmployeeManagement = () => {
         id: crypto.randomUUID()
       };
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('employees')
         .insert([payload]);
 

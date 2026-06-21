@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { loadModels, getFaceDescriptor } from '../utils/faceApi';
@@ -13,17 +13,6 @@ const EmployeeRegistration = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const init = async () => {
-      const loaded = await loadModels();
-      setModelsLoaded(loaded);
-      if (loaded) startVideo();
-    };
-    init();
-    
-    return () => stopVideo();
-  }, []);
 
   const startVideo = () => {
     navigator.mediaDevices.getUserMedia({ video: {} })
@@ -43,6 +32,17 @@ const EmployeeRegistration = () => {
       videoRef.current.srcObject.getTracks().forEach(track => track.stop());
     }
   };
+
+  useEffect(() => {
+    const init = async () => {
+      const loaded = await loadModels();
+      setModelsLoaded(loaded);
+      if (loaded) startVideo();
+    };
+    init();
+    
+    return () => stopVideo();
+  }, []);
 
   const handleCapture = async () => {
     if (!videoRef.current || !modelsLoaded) return;

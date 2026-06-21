@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { 
@@ -8,8 +8,6 @@ import {
   Zap, 
   CheckCircle2, 
   ArrowRight,
-  Monitor,
-  Smartphone,
   Cloud,
   BarChart3,
   Lock,

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext({});
@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
 
   const signInManually = async (email, password, expectedRole) => {
     if (expectedRole === 'admin') {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('admins')
         .select('*')
         .eq('email', email)
@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Invalid login credentials');
       }
     } else {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('employees')
         .select('*')
         .eq('email', email)

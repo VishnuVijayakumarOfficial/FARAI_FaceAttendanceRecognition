@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { loadModels, getFaceDescriptor, compareFaces } from '../utils/faceApi';
@@ -38,6 +38,23 @@ const EmployeeAttendance = () => {
   const [attendError, setAttendError] = useState(null);
   const [alreadyMarked, setAlreadyMarked] = useState(false);
 
+  const startVideo = () => {
+    navigator.mediaDevices
+      .getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } })
+      .then(stream => {
+        if (videoRef.current) videoRef.current.srcObject = stream;
+      })
+      .catch(() => {
+        setRegisterError('Camera access denied. Please allow camera permissions and refresh.');
+      });
+  };
+
+  const stopVideo = () => {
+    if (videoRef.current?.srcObject) {
+      videoRef.current.srcObject.getTracks().forEach(t => t.stop());
+    }
+  };
+
   useEffect(() => {
     const init = async () => {
       setLoadingData(true);
@@ -70,22 +87,7 @@ const EmployeeAttendance = () => {
     return () => stopVideo();
   }, []);
 
-  const startVideo = () => {
-    navigator.mediaDevices
-      .getUserMedia({ video: { width: 640, height: 480, facingMode: 'user' } })
-      .then(stream => {
-        if (videoRef.current) videoRef.current.srcObject = stream;
-      })
-      .catch(() => {
-        setRegisterError('Camera access denied. Please allow camera permissions and refresh.');
-      });
-  };
 
-  const stopVideo = () => {
-    if (videoRef.current?.srcObject) {
-      videoRef.current.srcObject.getTracks().forEach(t => t.stop());
-    }
-  };
 
   const getInitials = (name) => {
     if (!name) return '?';
