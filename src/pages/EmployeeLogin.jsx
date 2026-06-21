@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Lock, Mail, ArrowLeft, Loader2, Users } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from './hooks/useAuth';
 
 const EmployeeLogin = () => {
   const [email, setEmail] = useState('');

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext({});
@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
           const parsed = JSON.parse(storedUser);
           setUser(parsed);
           setRole(parsed.role);
-        } catch (e) {
+        } catch {
           localStorage.removeItem('custom_auth_user');
         }
       }
@@ -25,31 +25,6 @@ export const AuthProvider = ({ children }) => {
 
     getSession();
   }, []);
-
-  const fetchUserRole = async (userId) => {
-    // Check if user is admin
-    const { data: adminData } = await supabase
-      .from('admins')
-      .select('id')
-      .eq('id', userId)
-      .single();
-
-    if (adminData) {
-      setRole('admin');
-      return;
-    }
-
-    // Check if user is employee
-    const { data: employeeData } = await supabase
-      .from('employees')
-      .select('id')
-      .eq('id', userId)
-      .single();
-
-    if (employeeData) {
-      setRole('employee');
-    }
-  };
 
   const signOut = async () => {
     localStorage.removeItem('custom_auth_user');
@@ -111,4 +86,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
+

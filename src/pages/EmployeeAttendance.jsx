@@ -15,7 +15,7 @@ import {
   Lock,
   Unlock
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from './hooks/useAuth';
 
 const EmployeeAttendance = () => {
   const { user } = useAuth();
@@ -85,7 +85,7 @@ const EmployeeAttendance = () => {
 
     init();
     return () => stopVideo();
-  }, []);
+  }, [user.id]);
 
 
 

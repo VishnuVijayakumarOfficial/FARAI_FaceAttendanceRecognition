@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import {
   Search,
@@ -19,35 +19,35 @@ const AttendanceReports = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
-
-    // 1. Fetch all employees
-    const { data: empData } = await supabase
-      .from('employees')
-      .select('id, name, employee_id, department, designation, face_image, face_descriptor')
-      .order('name', { ascending: true });
-
-    // 2. Fetch attendance for selected date
-    const { data: attData } = await supabase
-      .from('attendance')
-      .select('employee_id, login_time, status')
-      .eq('date', dateFilter);
-
-    // Build a map: employee_id -> attendance record
-    const map = {};
-    if (attData) {
-      attData.forEach(att => { map[att.employee_id] = att; });
-    }
-
-    setAllEmployees(empData || []);
-    setAttendanceMap(map);
-    setLoading(false);
-  }, [dateFilter]);
-
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+
+      // 1. Fetch all employees
+      const { data: empData } = await supabase
+        .from('employees')
+        .select('id, name, employee_id, department, designation, face_image, face_descriptor')
+        .order('name', { ascending: true });
+
+      // 2. Fetch attendance for selected date
+      const { data: attData } = await supabase
+        .from('attendance')
+        .select('employee_id, login_time, status')
+        .eq('date', dateFilter);
+
+      // Build a map: employee_id -> attendance record
+      const map = {};
+      if (attData) {
+        attData.forEach(att => { map[att.employee_id] = att; });
+      }
+
+      setAllEmployees(empData || []);
+      setAttendanceMap(map);
+      setLoading(false);
+    };
+
     fetchData();
-  }, [fetchData]);
+  }, [dateFilter]);
 
   // Merge employees with attendance status
   const mergedRecords = allEmployees.map(emp => ({

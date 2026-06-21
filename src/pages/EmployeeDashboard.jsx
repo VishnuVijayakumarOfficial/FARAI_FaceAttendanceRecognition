@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from './hooks/useAuth';
 import { 
   Calendar, 
   Clock, 
@@ -24,30 +24,30 @@ const EmployeeDashboard = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const fetchData = async () => {
-    setLoading(true);
-    const { data: empData } = await supabase
-      .from('employees')
-      .select('*')
-      .eq('id', user.id)
-      .single();
-
-    setEmployeeInfo(empData);
-
-    const { data: historyData } = await supabase
-      .from('attendance')
-      .select('*')
-      .eq('employee_id', user.id)
-      .order('date', { ascending: false })
-      .limit(10);
-
-    setHistory(historyData || []);
-    setLoading(false);
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const { data: empData } = await supabase
+        .from('employees')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      setEmployeeInfo(empData);
+
+      const { data: historyData } = await supabase
+        .from('attendance')
+        .select('*')
+        .eq('employee_id', user.id)
+        .order('date', { ascending: false })
+        .limit(10);
+
+      setHistory(historyData || []);
+      setLoading(false);
+    };
+
     fetchData();
-  }, []);
+  }, [user.id]);
 
   const isTodayMarked = () => {
     const today = new Date().toISOString().split('T')[0];
