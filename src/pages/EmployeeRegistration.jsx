@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { loadModels, getFaceDescriptor } from '../utils/faceApi';
 import { Camera, RefreshCw, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import { useAuth } from './hooks/useAuth';
+import { useAuth } from '../hooks/useAuth';
 
 const EmployeeRegistration = () => {
   const { user } = useAuth();
