@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { loadModels, getFaceDescriptor, compareFaces } from '../utils/faceApi';
 import {
@@ -13,15 +13,20 @@ import {
   RefreshCw,
   ArrowLeft,
   Lock,
-  Unlock
+  Unlock,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../hooks/useTheme';
 
 const EmployeeAttendance = () => {
   const { user } = useAuth();
   const videoRef = useRef(null);
   const navigate = useNavigate();
-
+  const [searchParams] = useSearchParams();
+  const mode = searchParams.get('mode') || 'auto';
+  const { isDarkMode, toggleTheme } = useTheme();
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [modelsError, setModelsError] = useState(false);
   const [employeeInfo, setEmployeeInfo] = useState(null);
@@ -95,12 +100,17 @@ const EmployeeAttendance = () => {
   };
 
   const isWithinTimeRange = () => {
-    if (!employeeInfo?.attendance_start_time || !employeeInfo?.attendance_end_time) return false;
+    if (!employeeInfo?.attendance_start_time || !employeeInfo?.attendance_end_time) return true;
     const now = new Date();
     const current = now.getHours() * 60 + now.getMinutes();
     const [sh, sm] = employeeInfo.attendance_start_time.split(':').map(Number);
     const [eh, em] = employeeInfo.attendance_end_time.split(':').map(Number);
-    return current >= sh * 60 + sm && current <= eh * 60 + em;
+    
+    // Give a generous buffer: 4 hours before and 4 hours after shift
+    const startMins = sh * 60 + sm - 240;
+    const endMins = eh * 60 + em + 240;
+    
+    return current >= startMins && current <= endMins;
   };
 
   // ── Register Face ─────────────────────────────────────────────────────────
@@ -217,9 +227,34 @@ const EmployeeAttendance = () => {
   const withinWindow = isWithinTimeRange();
   const initials = getInitials(employeeInfo?.name);
 
+  const hideRegistrationStep = mode === 'attendance' && faceRegistered;
+  const hideAttendanceStep = mode === 'register';
+
   return (
-    <div className="min-h-screen bg-slate-50 p-6 font-outfit">
+    <div className={`min-h-screen p-6 font-outfit transition-colors ${isDarkMode ? 'dark bg-slate-950' : 'bg-slate-50'}`}>
       <div className="max-w-5xl mx-auto">
+
+        {/* Top Navbar */}
+        <nav className="flex items-center justify-between mb-8 pb-6 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary-500 text-white flex items-center justify-center shadow-lg shadow-primary-500/20">
+              <ScanFace size={24} />
+            </div>
+            <div>
+              <h1 className="text-xl font-black text-slate-900 dark:text-white leading-tight">FAR<span className="text-primary-500">AI</span></h1>
+              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Employee Portal</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={toggleTheme} 
+              className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm"
+            >
+              {isDarkMode ? <Sun size={20} className="text-amber-500" /> : <Moon size={20} />}
+            </button>
+          </div>
+        </nav>
 
         {/* Back Button */}
         <button
@@ -295,6 +330,7 @@ const EmployeeAttendance = () => {
         )}
 
         {/* ── Step Flow Indicator ── */}
+        {!hideRegistrationStep && !hideAttendanceStep && (
         <div className="flex items-center gap-4 mb-8">
           <div className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-sm flex-1 justify-center border-2 transition-all ${
             faceRegistered
@@ -318,6 +354,7 @@ const EmployeeAttendance = () => {
             {(attendSuccess || alreadyMarked) && <CheckCircle size={16} />}
           </div>
         </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
@@ -391,6 +428,7 @@ const EmployeeAttendance = () => {
           <div className="space-y-6">
 
             {/* ── STEP 1: Register Face ── */}
+            {!hideRegistrationStep && (
             <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl p-8">
               <div className="flex items-center gap-3 mb-5">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm flex-shrink-0 ${
@@ -457,8 +495,10 @@ const EmployeeAttendance = () => {
                 )}
               </button>
             </div>
+            )}
 
             {/* ── STEP 2: Mark Attendance ── */}
+            {!hideAttendanceStep && (
             <div className={`bg-white rounded-[2.5rem] border shadow-xl p-8 transition-all duration-300 ${
               !faceRegistered ? 'opacity-50 border-slate-100' : 'border-slate-100'
             }`}>
@@ -532,6 +572,7 @@ const EmployeeAttendance = () => {
                 )}
               </button>
             </div>
+            )}
 
           </div>
         </div>

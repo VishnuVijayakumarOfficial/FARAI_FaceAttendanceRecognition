@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
+import { useTheme } from '../hooks/useTheme';
 import { 
   Calendar, 
   Clock, 
@@ -14,7 +15,9 @@ import {
   Camera,
   AlertTriangle,
   Loader2,
-  ShieldCheck
+  ShieldCheck,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 const EmployeeDashboard = () => {
@@ -23,6 +26,7 @@ const EmployeeDashboard = () => {
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { isDarkMode, toggleTheme } = useTheme();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,6 +66,13 @@ const EmployeeDashboard = () => {
     return Math.round((present / history.length) * 100);
   };
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center font-outfit">
@@ -74,8 +85,30 @@ const EmployeeDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 md:p-12 font-outfit">
+    <div className={`min-h-screen p-6 md:p-12 font-outfit transition-colors ${isDarkMode ? 'dark bg-slate-950' : 'bg-slate-50'}`}>
       <div className="max-w-6xl mx-auto">
+
+        {/* Top Navbar */}
+        <nav className="flex items-center justify-between mb-10 pb-6 border-b border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-primary-500 text-white flex items-center justify-center shadow-lg shadow-primary-500/20">
+              <ScanFace size={24} />
+            </div>
+            <div>
+              <h1 className="text-xl font-black text-slate-900 dark:text-white leading-tight">FAR<span className="text-primary-500">AI</span></h1>
+              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Employee Portal</p>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={toggleTheme} 
+              className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm"
+            >
+              {isDarkMode ? <Sun size={20} className="text-amber-500" /> : <Moon size={20} />}
+            </button>
+          </div>
+        </nav>
 
         {/* Header */}
         <header className="flex justify-between items-center mb-16">
@@ -91,7 +124,7 @@ const EmployeeDashboard = () => {
               </div>
             )}
             <div>
-              <p className="text-xs font-bold text-primary-600 uppercase tracking-widest mb-1">Welcome back,</p>
+              <p className="text-xs font-bold text-primary-600 uppercase tracking-widest mb-1">{getGreeting()},</p>
               <h1 className="text-3xl font-black text-slate-900">{employeeInfo?.name}</h1>
               <p className="text-slate-400 font-bold text-sm tracking-tight">{employeeInfo?.designation} • {employeeInfo?.department}</p>
             </div>
@@ -114,7 +147,7 @@ const EmployeeDashboard = () => {
               </div>
             </div>
             <button
-              onClick={() => navigate('/employee/attendance')}
+              onClick={() => navigate('/employee/attendance?mode=register')}
               className="flex-shrink-0 flex items-center gap-2 px-6 py-3 bg-amber-500 text-white font-black rounded-2xl hover:bg-amber-600 transition-all shadow-lg shadow-amber-500/30 active:scale-95"
             >
               <Camera size={20} />
@@ -141,7 +174,7 @@ const EmployeeDashboard = () => {
                 </div>
               ) : (
                 <button
-                  onClick={() => navigate('/employee/attendance')}
+                  onClick={() => navigate('/employee/attendance?mode=attendance')}
                   disabled={!isFaceRegistered() && false /* allow both registration + attendance */}
                   className="w-full py-5 bg-white text-primary-600 rounded-[2rem] font-black text-lg hover:bg-slate-50 transition-all shadow-xl flex items-center justify-center gap-3 active:scale-95 group"
                 >
@@ -180,7 +213,7 @@ const EmployeeDashboard = () => {
                   </div>
                   {/* Always show button to go to registration page */}
                   <button
-                    onClick={() => navigate('/employee/attendance')}
+                    onClick={() => navigate('/employee/attendance?mode=register')}
                     className="w-full py-3 bg-slate-800 text-white rounded-2xl font-black text-sm hover:bg-slate-900 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2"
                   >
                     <ScanFace size={16} />
@@ -195,7 +228,7 @@ const EmployeeDashboard = () => {
                   <p className="font-black text-slate-700 mb-1">No Face Registered</p>
                   <p className="text-xs text-slate-400 font-medium mb-4">Register your face to start marking attendance.</p>
                   <button
-                    onClick={() => navigate('/employee/attendance')}
+                    onClick={() => navigate('/employee/attendance?mode=register')}
                     className="w-full py-3 bg-primary-500 text-white rounded-2xl font-black text-sm hover:bg-primary-600 transition-all shadow-lg shadow-primary-500/20 active:scale-95 flex items-center justify-center gap-2"
                   >
                     <Camera size={16} />

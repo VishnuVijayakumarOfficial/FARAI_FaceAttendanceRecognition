@@ -20,12 +20,7 @@ const EmployeeLogin = () => {
 
     try {
       const empData = await signInManually(email, password, 'employee');
-
-      if (!empData.face_descriptor) {
-        navigate('/employee/register-face');
-      } else {
-        navigate('/employee/dashboard');
-      }
+      navigate('/employee/dashboard');
     } catch (err) {
       setError(err.message);
     } finally {
