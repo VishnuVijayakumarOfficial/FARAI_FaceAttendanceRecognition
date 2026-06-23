@@ -1,0 +1,147 @@
+.sidebar {
+  width: 18rem;
+  height: 100vh;
+  background-color: white;
+  border-right: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 20;
+}
+
+:global(.dark) .sidebar {
+  background-color: #0f172a;
+  border-right-color: #1e293b;
+}
+
+.header {
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.iconWrapper {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background-color: #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.2);
+}
+
+.icon {
+  color: white;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #0f172a;
+}
+:global(.dark) .title { color: white; }
+
+.subtitle {
+  font-size: 10px;
+  color: #059669;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.nav {
+  flex: 1;
+  padding: 2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s;
+  color: #64748b;
+  text-decoration: none;
+}
+
+.navItem:hover {
+  color: #0f172a;
+  background-color: #f8fafc;
+}
+
+:global(.dark) .navItem { color: #94a3b8; }
+:global(.dark) .navItem:hover {
+  color: white;
+  background-color: rgba(30, 41, 59, 0.5);
+}
+
+.navItemActive {
+  background-color: #ecfdf5;
+  color: #059669;
+  font-weight: 700;
+}
+
+:global(.dark) .navItemActive {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+}
+
+.navItemText {
+  font-weight: 700;
+}
+
+.footer {
+  padding: 1rem;
+  margin-top: auto;
+}
+
+.signOutBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  color: #64748b;
+  transition: all 0.3s;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.signOutBtn:hover {
+  color: #dc2626;
+  background-color: #fef2f2;
+}
+
+:global(.dark) .signOutBtn { color: #94a3b8; }
+:global(.dark) .signOutBtn:hover {
+  color: #f87171;
+  background-color: rgba(239, 68, 68, 0.1);
+}
+
+/* Media Visibility */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 16rem;
+  }
+}
+@media (max-width: 640px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    border-right: none;
+    border-bottom: 1px solid #f1f5f9;
+  }
+}

@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../hooks/useTheme';
+import styles from './EmployeeAttendance.module.css';
 
 const EmployeeAttendance = () => {
   const { user } = useAuth();
@@ -92,8 +93,6 @@ const EmployeeAttendance = () => {
     return () => stopVideo();
   }, [user.id]);
 
-
-
   const getInitials = (name) => {
     if (!name) return '?';
     return name.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
@@ -113,7 +112,6 @@ const EmployeeAttendance = () => {
     return current >= startMins && current <= endMins;
   };
 
-  // ── Register Face ─────────────────────────────────────────────────────────
   const handleRegisterFace = async () => {
     if (!videoRef.current || !modelsLoaded) return;
     setRegistering(true);
@@ -123,13 +121,11 @@ const EmployeeAttendance = () => {
       const descriptor = await getFaceDescriptor(videoRef.current);
       if (!descriptor) throw new Error('No face detected. Look directly at the camera and try again.');
 
-      // Capture face as a small 200x200 thumbnail to keep storage small
       const srcCanvas = document.createElement('canvas');
       srcCanvas.width = videoRef.current.videoWidth || 640;
       srcCanvas.height = videoRef.current.videoHeight || 480;
       srcCanvas.getContext('2d').drawImage(videoRef.current, 0, 0, srcCanvas.width, srcCanvas.height);
 
-      // Crop to square from center and resize to 200x200
       const thumbCanvas = document.createElement('canvas');
       thumbCanvas.width = 200;
       thumbCanvas.height = 200;
@@ -140,9 +136,6 @@ const EmployeeAttendance = () => {
       ctx.drawImage(srcCanvas, offsetX, offsetY, side, side, 0, 0, 200, 200);
       const faceImage = thumbCanvas.toDataURL('image/jpeg', 0.7);
 
-      console.log('[FaceReg] Saving descriptor + image for user:', user.id);
-      console.log('[FaceReg] Image size (chars):', faceImage.length);
-
       const { data: updateData, error: updateError } = await supabase
         .from('employees')
         .update({
@@ -152,7 +145,6 @@ const EmployeeAttendance = () => {
         .eq('id', user.id)
         .select();
 
-      console.log('[FaceReg] Update result:', updateData, updateError);
       if (updateError) throw new Error('Failed to save face data: ' + updateError.message);
       if (!updateData || updateData.length === 0) throw new Error('Update had no effect. Check if face_image and face_descriptor columns exist in your Supabase employees table.');
 
@@ -169,7 +161,6 @@ const EmployeeAttendance = () => {
     }
   };
 
-  // ── Mark Attendance ───────────────────────────────────────────────────────
   const handleMarkAttendance = async () => {
     if (!videoRef.current || !modelsLoaded || !employeeInfo) return;
     setVerifying(true);
@@ -214,10 +205,10 @@ const EmployeeAttendance = () => {
 
   if (loadingData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 font-outfit">
-        <div className="text-center">
-          <Loader2 className="animate-spin text-primary-500 mx-auto mb-4" size={48} />
-          <p className="text-slate-500 font-bold">Loading your profile...</p>
+      <div className={styles.loadingContainer}>
+        <div style={{ textAlign: 'center' }}>
+          <Loader2 className={styles.loadingSpinner} size={48} />
+          <p className={styles.loadingText}>Loading your profile...</p>
         </div>
       </div>
     );
@@ -231,349 +222,311 @@ const EmployeeAttendance = () => {
   const hideAttendanceStep = mode === 'register';
 
   return (
-    <div className={`min-h-screen p-6 font-outfit transition-colors ${isDarkMode ? 'dark bg-slate-950' : 'bg-slate-50'}`}>
-      <div className="max-w-5xl mx-auto">
+    <div className={styles.pageContainer}>
+      <div className={styles.contentWrapper}>
 
         {/* Top Navbar */}
-        <nav className="flex items-center justify-between mb-8 pb-6 border-b border-slate-200 dark:border-slate-800">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary-500 text-white flex items-center justify-center shadow-lg shadow-primary-500/20">
+        <nav className={styles.navbar}>
+          <div className={styles.brandWrapper}>
+            <div className={styles.brandIcon}>
               <ScanFace size={24} />
             </div>
             <div>
-              <h1 className="text-xl font-black text-slate-900 dark:text-white leading-tight">FAR<span className="text-primary-500">AI</span></h1>
-              <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Employee Portal</p>
+              <h1 className={styles.brandTitle}>FAR<span className={styles.brandHighlight}>AI</span></h1>
+              <p className={styles.brandSubtitle}>Employee Portal</p>
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
-            <button 
-              onClick={toggleTheme} 
-              className="p-3 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all shadow-sm"
-            >
-              {isDarkMode ? <Sun size={20} className="text-amber-500" /> : <Moon size={20} />}
-            </button>
-          </div>
+          <button onClick={toggleTheme} className={styles.themeBtn}>
+            {isDarkMode ? <Sun size={20} color="#f59e0b" /> : <Moon size={20} />}
+          </button>
         </nav>
 
         {/* Back Button */}
-        <button
-          onClick={() => navigate('/employee/dashboard')}
-          className="flex items-center gap-2 text-slate-400 hover:text-slate-700 font-bold mb-8 transition-colors"
-        >
+        <button onClick={() => navigate('/employee/dashboard')} className={styles.backBtn}>
           <ArrowLeft size={18} /> Back to Dashboard
         </button>
 
-        {/* ── Employee Profile Header ── */}
-        <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl p-8 mb-8">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
-            {/* Avatar: registered face or initials */}
-            <div className="flex-shrink-0">
+        {/* Employee Profile Header */}
+        <div className={styles.profileCard}>
+          <div className={styles.profileFlex}>
+            <div className={styles.avatarContainer}>
               {employeeInfo?.face_image ? (
-                <div className="w-24 h-24 rounded-[1.5rem] overflow-hidden border-4 border-emerald-200 shadow-xl">
-                  <img
-                    src={employeeInfo.face_image}
-                    alt={employeeInfo.name}
-                    className="w-full h-full object-cover"
-                  />
+                <div className={styles.avatarImage}>
+                  <img src={employeeInfo.face_image} alt={employeeInfo.name} />
                 </div>
               ) : (
-                <div className="w-24 h-24 rounded-[1.5rem] bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shadow-xl shadow-primary-500/20">
-                  <span className="text-3xl font-black text-white">{initials}</span>
+                <div className={styles.avatarFallback}>
+                  <span className={styles.avatarFallbackText}>{initials}</span>
                 </div>
               )}
             </div>
 
-            {/* Info */}
-            <div className="flex-1 text-center sm:text-left">
-              <p className="text-xs font-black text-primary-500 uppercase tracking-widest mb-1">Employee Identity Center</p>
-              <h1 className="text-3xl font-black text-slate-900 mb-1">{employeeInfo?.name}</h1>
-              <p className="text-slate-400 font-bold text-sm">
+            <div className={styles.profileInfo}>
+              <p className={styles.profileLabel}>Employee Identity Center</p>
+              <h1 className={styles.profileName}>{employeeInfo?.name}</h1>
+              <p className={styles.profileDetails}>
                 {employeeInfo?.designation} &bull; {employeeInfo?.department} &bull; #{employeeInfo?.employee_id}
               </p>
 
-              {/* Status pills */}
-              <div className="flex flex-wrap gap-3 mt-4 justify-center sm:justify-start">
-                <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider ${
-                  faceRegistered ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'
-                }`}>
+              <div className={styles.statusPills}>
+                <span className={`${styles.pill} ${faceRegistered ? styles.pillSuccess : styles.pillWarning}`}>
                   <ScanFace size={12} />
                   {faceRegistered ? 'Face Registered' : 'Face Not Registered'}
                 </span>
-                <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-black uppercase tracking-wider ${
-                  alreadyMarked ? 'bg-emerald-100 text-emerald-700' : withinWindow ? 'bg-primary-100 text-primary-700' : 'bg-rose-100 text-rose-600'
-                }`}>
+                <span className={`${styles.pill} ${alreadyMarked ? styles.pillSuccess : withinWindow ? styles.pillPrimary : styles.pillError}`}>
                   <Clock size={12} />
                   {alreadyMarked ? 'Present Today' : withinWindow ? 'Window Open' : 'Window Closed'}
                 </span>
               </div>
             </div>
 
-            {/* Time Window */}
-            <div className={`flex-shrink-0 p-4 rounded-2xl text-center border ${
-              withinWindow ? 'bg-emerald-50 border-emerald-200' : 'bg-slate-50 border-slate-200'
-            }`}>
-              <p className="text-xs font-black text-slate-400 uppercase tracking-wider mb-1">Shift Window</p>
-              <p className="font-black text-slate-800 text-lg">{employeeInfo?.attendance_start_time}</p>
-              <p className="text-xs text-slate-400 font-bold my-0.5">to</p>
-              <p className="font-black text-slate-800 text-lg">{employeeInfo?.attendance_end_time}</p>
+            <div className={`${styles.timeWindow} ${withinWindow ? styles.timeWindowOpen : ''}`}>
+              <p className={styles.timeLabel}>Shift Window</p>
+              <p className={styles.timeValue}>{employeeInfo?.attendance_start_time}</p>
+              <p className={styles.timeTo}>to</p>
+              <p className={styles.timeValue}>{employeeInfo?.attendance_end_time}</p>
             </div>
           </div>
         </div>
 
-        {/* Models error */}
         {modelsError && (
-          <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl flex items-center gap-3 text-rose-600">
+          <div className={styles.errorBanner}>
             <AlertCircle size={20} />
-            <p className="text-sm font-bold">AI models failed to load. Please refresh the page.</p>
+            <p className={styles.errorText}>AI models failed to load. Please refresh the page.</p>
           </div>
         )}
 
-        {/* ── Step Flow Indicator ── */}
+        {/* Step Flow Indicator */}
         {!hideRegistrationStep && !hideAttendanceStep && (
-        <div className="flex items-center gap-4 mb-8">
-          <div className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-sm flex-1 justify-center border-2 transition-all ${
-            faceRegistered
-              ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/20'
-              : 'bg-white text-primary-600 border-primary-300'
-          }`}>
-            <ScanFace size={18} />
-            Step 1: Register Face
-            {faceRegistered && <CheckCircle size={16} />}
+          <div className={styles.stepsContainer}>
+            <div className={`${styles.stepBox} ${faceRegistered ? styles.stepActive : styles.stepPending}`}>
+              <ScanFace size={18} />
+              Step 1: Register Face
+              {faceRegistered && <CheckCircle size={16} />}
+            </div>
+            <div className={`${styles.stepLine} ${faceRegistered ? styles.stepLineActive : styles.stepLinePending}`} />
+            <div className={`${styles.stepBox} ${
+              attendSuccess || alreadyMarked
+                ? styles.stepActive
+                : faceRegistered && withinWindow
+                  ? styles.stepPending
+                  : styles.stepDisabled
+            }`}>
+              {faceRegistered ? <Unlock size={18} /> : <Lock size={18} />}
+              Step 2: Mark Attendance
+              {(attendSuccess || alreadyMarked) && <CheckCircle size={16} />}
+            </div>
           </div>
-          <div className={`w-10 h-0.5 flex-shrink-0 ${faceRegistered ? 'bg-emerald-400' : 'bg-slate-200'}`} />
-          <div className={`flex items-center gap-2 px-5 py-3 rounded-2xl font-black text-sm flex-1 justify-center border-2 transition-all ${
-            attendSuccess || alreadyMarked
-              ? 'bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/20'
-              : faceRegistered && withinWindow
-                ? 'bg-white text-emerald-600 border-emerald-300'
-                : 'bg-slate-50 text-slate-400 border-slate-200'
-          }`}>
-            {faceRegistered ? <Unlock size={18} /> : <Lock size={18} />}
-            Step 2: Mark Attendance
-            {(attendSuccess || alreadyMarked) && <CheckCircle size={16} />}
-          </div>
-        </div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-          {/* ── LEFT: Camera Feed ── */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl overflow-hidden">
-              <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center">
-                    <Camera size={20} className="text-primary-500" />
+        <div className={styles.mainGrid}>
+          {/* LEFT: Camera Feed */}
+          <div>
+            <div className={styles.cameraCard}>
+              <div className={styles.cameraHeader}>
+                <div className={styles.cameraHeaderLeft}>
+                  <div className={styles.cameraIconBox}>
+                    <Camera size={20} />
                   </div>
                   <div>
-                    <p className="font-black text-slate-800">Live Camera</p>
-                    <p className="text-xs text-slate-400 font-medium">Keep your face in the circle</p>
+                    <p className={styles.cameraTitle}>Live Camera</p>
+                    <p className={styles.cameraSub}>Keep your face in the circle</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                  <span className="text-xs font-black text-emerald-600">LIVE</span>
+                <div className={styles.liveIndicator}>
+                  <div className={styles.liveDot}></div>
+                  <span className={styles.liveText}>LIVE</span>
                 </div>
               </div>
 
-              {/* Video */}
-              <div className="relative aspect-video bg-slate-900">
-                <video ref={videoRef} autoPlay muted playsInline className="w-full h-full object-cover" />
-
-                {/* Face guide overlay */}
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="w-44 h-52 rounded-full border-4 border-white/50 border-dashed shadow-lg"></div>
+              <div className={styles.videoContainer}>
+                <video ref={videoRef} autoPlay muted playsInline className={styles.videoElement} />
+                <div className={styles.guideOverlay}>
+                  <div className={styles.guideCircle}></div>
                 </div>
 
-                {/* Initials watermark when no video */}
                 {!modelsLoaded && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-slate-900/80">
-                    <div className="text-center">
-                      <div className="w-20 h-20 rounded-full bg-primary-500 flex items-center justify-center mx-auto mb-3 shadow-xl">
-                        <span className="text-3xl font-black text-white">{initials}</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-white/70">
-                        <Loader2 size={14} className="animate-spin" />
-                        <span className="text-xs font-bold">Loading AI...</span>
-                      </div>
+                  <div className={styles.overlayPanel}>
+                    <div className={styles.overlayFallbackBox}>
+                      <span className={styles.overlayFallbackText}>{initials}</span>
+                    </div>
+                    <div className={styles.overlayStatusRow}>
+                      <Loader2 size={14} className="animate-spin" />
+                      <span className={styles.overlayStatusText}>Loading AI...</span>
                     </div>
                   </div>
                 )}
 
-                {/* Registration success overlay */}
                 {registerSuccess && (
-                  <div className="absolute inset-0 bg-emerald-500/30 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
-                    <div className="bg-white p-5 rounded-full shadow-2xl">
-                      <CheckCircle size={50} className="text-emerald-500" />
+                  <div className={styles.successOverlay}>
+                    <div className={styles.successIconBox}>
+                      <CheckCircle size={50} />
                     </div>
-                    <p className="font-black text-white text-xl drop-shadow-lg">Face Registered!</p>
+                    <p className={styles.successText}>Face Registered!</p>
                   </div>
                 )}
 
-                {/* Attendance success overlay */}
                 {attendSuccess && (
-                  <div className="absolute inset-0 bg-primary-500/30 backdrop-blur-sm flex flex-col items-center justify-center gap-3">
-                    <div className="bg-white p-5 rounded-full shadow-2xl">
-                      <UserCheck size={50} className="text-primary-500" />
+                  <div className={styles.successOverlay}>
+                    <div className={styles.successIconBox}>
+                      <UserCheck size={50} />
                     </div>
-                    <p className="font-black text-white text-xl drop-shadow-lg">Attendance Marked!</p>
+                    <p className={styles.successText}>Attendance Marked!</p>
                   </div>
                 )}
               </div>
             </div>
           </div>
 
-          {/* ── RIGHT: Action Panels ── */}
-          <div className="space-y-6">
+          {/* RIGHT: Action Panels */}
+          <div className={styles.actionColumn}>
 
-            {/* ── STEP 1: Register Face ── */}
+            {/* STEP 1 */}
             {!hideRegistrationStep && (
-            <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-xl p-8">
-              <div className="flex items-center gap-3 mb-5">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm flex-shrink-0 ${
-                  faceRegistered ? 'bg-emerald-500 text-white' : 'bg-primary-500 text-white'
-                }`}>1</div>
-                <div>
-                  <h2 className="text-lg font-black text-slate-900">Register Your Face</h2>
-                  <p className="text-xs text-slate-400 font-medium">One-time setup to enable attendance</p>
-                </div>
-              </div>
-
-              {/* Registered face preview with initials fallback */}
-              <div className="flex items-center gap-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 mb-5">
-                {employeeInfo?.face_image ? (
-                  <div className="w-16 h-16 rounded-xl overflow-hidden border-2 border-emerald-200 shadow-md flex-shrink-0">
-                    <img src={employeeInfo.face_image} alt="Registered" className="w-full h-full object-cover" />
+              <div className={styles.actionCard}>
+                <div className={styles.actionHeader}>
+                  <div className={`${styles.actionNumber} ${faceRegistered ? styles.actionNumberActive : styles.actionNumberActive}`}>
+                    1
                   </div>
-                ) : (
-                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center shadow-md flex-shrink-0">
-                    <span className="text-xl font-black text-white">{initials}</span>
-                  </div>
-                )}
-                <div>
-                  <p className="font-black text-slate-800">{employeeInfo?.name}</p>
-                  <p className={`text-xs font-bold mt-0.5 ${faceRegistered ? 'text-emerald-600' : 'text-amber-600'}`}>
-                    {faceRegistered ? '✓ Face registered — can re-register anytime' : '⚠ No face data saved yet'}
-                  </p>
-                </div>
-              </div>
-
-              {registerError && (
-                <div className="mb-4 p-3 bg-rose-50 border border-rose-100 rounded-xl flex items-start gap-2 text-rose-600">
-                  <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
-                  <p className="text-sm font-bold">{registerError}</p>
-                </div>
-              )}
-
-              {registerSuccess && (
-                <div className="mb-4 p-3 bg-emerald-50 border border-emerald-100 rounded-xl flex items-center gap-2 text-emerald-600">
-                  <CheckCircle size={16} />
-                  <p className="text-sm font-bold">Face registered! Step 2 is now unlocked.</p>
-                </div>
-              )}
-
-              <button
-                onClick={handleRegisterFace}
-                disabled={!modelsLoaded || registering || registerSuccess}
-                className={`w-full py-4 rounded-2xl font-black text-base flex items-center justify-center gap-3 transition-all duration-300 active:scale-95 ${
-                  !modelsLoaded || registering || registerSuccess
-                    ? 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                    : faceRegistered
-                      ? 'bg-slate-800 text-white hover:bg-slate-900 shadow-lg'
-                      : 'btn-primary shadow-xl shadow-primary-500/25'
-                }`}
-              >
-                {registering ? (
-                  <><Loader2 size={20} className="animate-spin" /> Scanning Face...</>
-                ) : registerSuccess ? (
-                  <><CheckCircle size={20} /> Registered Successfully!</>
-                ) : faceRegistered ? (
-                  <><RefreshCw size={20} /> Re-Register Face</>
-                ) : (
-                  <><Camera size={20} /> Register My Face</>
-                )}
-              </button>
-            </div>
-            )}
-
-            {/* ── STEP 2: Mark Attendance ── */}
-            {!hideAttendanceStep && (
-            <div className={`bg-white rounded-[2.5rem] border shadow-xl p-8 transition-all duration-300 ${
-              !faceRegistered ? 'opacity-50 border-slate-100' : 'border-slate-100'
-            }`}>
-              <div className="flex items-center gap-3 mb-5">
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-black text-sm flex-shrink-0 ${
-                  attendSuccess || alreadyMarked ? 'bg-emerald-500 text-white' : faceRegistered ? 'bg-emerald-500 text-white' : 'bg-slate-200 text-slate-500'
-                }`}>2</div>
-                <div>
-                  <h2 className="text-lg font-black text-slate-900">Mark Attendance</h2>
-                  <p className="text-xs text-slate-400 font-medium">
-                    {!faceRegistered
-                      ? 'Complete Step 1 first'
-                      : alreadyMarked
-                        ? 'Already logged in today'
-                        : withinWindow
-                          ? 'Ready — window is open'
-                          : `Window: ${employeeInfo?.attendance_start_time} – ${employeeInfo?.attendance_end_time}`}
-                  </p>
-                </div>
-                {/* Lock / Unlock indicator */}
-                {faceRegistered ? (
-                  <Unlock size={16} className="ml-auto text-emerald-500" />
-                ) : (
-                  <Lock size={16} className="ml-auto text-slate-300" />
-                )}
-              </div>
-
-              {alreadyMarked && !attendSuccess && (
-                <div className="mb-4 p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-3 text-emerald-700">
-                  <CheckCircle size={20} />
                   <div>
-                    <p className="font-black">Attendance already marked for today!</p>
-                    <p className="text-xs text-emerald-600 mt-0.5">See you tomorrow 👋</p>
+                    <h2 className={styles.actionTitle}>Register Your Face</h2>
+                    <p className={styles.actionSub}>One-time setup to enable attendance</p>
                   </div>
                 </div>
-              )}
 
-              {attendError && (
-                <div className="mb-4 p-3 bg-rose-50 border border-rose-100 rounded-xl flex items-start gap-2 text-rose-600">
-                  <AlertCircle size={16} className="mt-0.5 flex-shrink-0" />
-                  <p className="text-sm font-bold">{attendError}</p>
+                <div className={styles.previewBox}>
+                  {employeeInfo?.face_image ? (
+                    <div className={styles.previewImgBox}>
+                      <img src={employeeInfo.face_image} alt="Registered" />
+                    </div>
+                  ) : (
+                    <div className={styles.previewFallbackBox}>
+                      <span className={styles.previewFallbackText}>{initials}</span>
+                    </div>
+                  )}
+                  <div>
+                    <p className={styles.previewName}>{employeeInfo?.name}</p>
+                    <p className={faceRegistered ? styles.previewStatusGood : styles.previewStatusBad}>
+                      {faceRegistered ? '✓ Face registered — can re-register anytime' : '⚠ No face data saved yet'}
+                    </p>
+                  </div>
                 </div>
-              )}
 
-              {attendSuccess && (
-                <div className="mb-4 p-3 bg-primary-50 border border-primary-100 rounded-xl flex items-center gap-2 text-primary-600">
-                  <CheckCircle size={16} />
-                  <p className="text-sm font-bold">Attendance marked! Redirecting...</p>
-                </div>
-              )}
-
-              <button
-                onClick={handleMarkAttendance}
-                disabled={!faceRegistered || !modelsLoaded || verifying || attendSuccess || alreadyMarked || !withinWindow}
-                className={`w-full py-4 rounded-2xl font-black text-base flex items-center justify-center gap-3 transition-all duration-300 active:scale-95 ${
-                  faceRegistered && modelsLoaded && !verifying && !attendSuccess && !alreadyMarked && withinWindow
-                    ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-xl shadow-emerald-500/25'
-                    : 'bg-slate-100 text-slate-400 cursor-not-allowed'
-                }`}
-              >
-                {verifying ? (
-                  <><Loader2 size={20} className="animate-spin" /> Verifying Face...</>
-                ) : attendSuccess || alreadyMarked ? (
-                  <><CheckCircle size={20} /> Attendance Marked</>
-                ) : !faceRegistered ? (
-                  <><Lock size={20} /> Register Face First (Step 1)</>
-                ) : !withinWindow ? (
-                  <><Clock size={20} /> Outside Attendance Window</>
-                ) : (
-                  <><UserCheck size={20} /> Verify &amp; Mark Present</>
+                {registerError && (
+                  <div className={styles.alertError}>
+                    <AlertCircle size={16} />
+                    <p className={styles.alertErrorText}>{registerError}</p>
+                  </div>
                 )}
-              </button>
-            </div>
+
+                {registerSuccess && (
+                  <div className={styles.alertSuccess}>
+                    <CheckCircle size={16} />
+                    <p className={styles.alertSuccessText}>Face registered! Step 2 is now unlocked.</p>
+                  </div>
+                )}
+
+                <button
+                  onClick={handleRegisterFace}
+                  disabled={!modelsLoaded || registering || registerSuccess}
+                  className={`${styles.btnAction} ${
+                    !modelsLoaded || registering || registerSuccess
+                      ? styles.btnActionDisabled
+                      : faceRegistered
+                        ? styles.btnActionSecondary
+                        : styles.btnActionPrimary
+                  }`}
+                >
+                  {registering ? (
+                    <><Loader2 size={20} className="animate-spin" /> Scanning Face...</>
+                  ) : registerSuccess ? (
+                    <><CheckCircle size={20} /> Registered Successfully!</>
+                  ) : faceRegistered ? (
+                    <><RefreshCw size={20} /> Re-Register Face</>
+                  ) : (
+                    <><Camera size={20} /> Register My Face</>
+                  )}
+                </button>
+              </div>
             )}
 
+            {/* STEP 2 */}
+            {!hideAttendanceStep && (
+              <div className={`${styles.actionCard} ${!faceRegistered ? styles.actionCardDisabled : ''}`}>
+                <div className={styles.actionHeader}>
+                  <div className={`${styles.actionNumber} ${
+                    attendSuccess || alreadyMarked || faceRegistered ? styles.actionNumberActive : styles.actionNumberDisabled
+                  }`}>
+                    2
+                  </div>
+                  <div>
+                    <h2 className={styles.actionTitle}>Mark Attendance</h2>
+                    <p className={styles.actionSub}>
+                      {!faceRegistered
+                        ? 'Complete Step 1 first'
+                        : alreadyMarked
+                          ? 'Already logged in today'
+                          : withinWindow
+                            ? 'Ready — window is open'
+                            : `Window: ${employeeInfo?.attendance_start_time} – ${employeeInfo?.attendance_end_time}`}
+                    </p>
+                  </div>
+                  {faceRegistered ? (
+                    <Unlock size={16} className={styles.unlockIcon} />
+                  ) : (
+                    <Lock size={16} className={styles.lockIcon} />
+                  )}
+                </div>
+
+                {alreadyMarked && !attendSuccess && (
+                  <div className={styles.alertSuccess}>
+                    <CheckCircle size={20} />
+                    <div>
+                      <p className={styles.alertSuccessText}>Attendance already marked for today!</p>
+                      <p className={styles.alertSuccessSub}>See you tomorrow 👋</p>
+                    </div>
+                  </div>
+                )}
+
+                {attendError && (
+                  <div className={styles.alertError}>
+                    <AlertCircle size={16} />
+                    <p className={styles.alertErrorText}>{attendError}</p>
+                  </div>
+                )}
+
+                {attendSuccess && (
+                  <div className={styles.alertSuccess}>
+                    <CheckCircle size={16} />
+                    <p className={styles.alertSuccessText}>Attendance marked! Redirecting...</p>
+                  </div>
+                )}
+
+                <button
+                  onClick={handleMarkAttendance}
+                  disabled={!faceRegistered || !modelsLoaded || verifying || attendSuccess || alreadyMarked || !withinWindow}
+                  className={`${styles.btnAction} ${
+                    faceRegistered && modelsLoaded && !verifying && !attendSuccess && !alreadyMarked && withinWindow
+                      ? styles.btnActionPrimary
+                      : styles.btnActionDisabled
+                  }`}
+                >
+                  {verifying ? (
+                    <><Loader2 size={20} className="animate-spin" /> Verifying Face...</>
+                  ) : attendSuccess || alreadyMarked ? (
+                    <><CheckCircle size={20} /> Attendance Marked</>
+                  ) : !faceRegistered ? (
+                    <><Lock size={20} /> Register Face First (Step 1)</>
+                  ) : !withinWindow ? (
+                    <><Clock size={20} /> Outside Attendance Window</>
+                  ) : (
+                    <><UserCheck size={20} /> Verify &amp; Mark Present</>
+                  )}
+                </button>
+              </div>
+            )}
+            
           </div>
         </div>
       </div>

@@ -8,6 +8,7 @@ import {
   ShieldCheck 
 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import styles from './Sidebar.module.css';
 
 const Sidebar = () => {
   const { signOut } = useAuth();
@@ -20,40 +21,35 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="w-72 h-screen bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 flex flex-col fixed left-0 top-0 z-20 font-outfit">
-      <div className="p-8 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-primary-500 flex items-center justify-center shadow-lg shadow-primary-500/20">
-          <ShieldCheck className="text-white" size={24} />
+    <div className={styles.sidebar}>
+      <div className={styles.header}>
+        <div className={styles.iconWrapper}>
+          <ShieldCheck className={styles.icon} size={24} />
         </div>
         <div>
-          <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">NexWork</h2>
-          <p className="text-[10px] text-primary-600 font-bold tracking-widest uppercase">Admin Panel</p>
+          <h2 className={styles.title}>NexWork</h2>
+          <p className={styles.subtitle}>Admin Panel</p>
         </div>
       </div>
 
-      <nav className="flex-1 px-4 py-8 space-y-2">
+      <nav className={styles.nav}>
         {navItems.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
             end={item.path === '/admin/dashboard'}
-            className={({ isActive }) => `
-              flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-300
-              ${isActive 
-                ? 'bg-primary-50 dark:bg-primary-500/10 text-primary-600 dark:text-primary-400 font-bold' 
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/50'}
-            `}
+            className={({ isActive }) => `${styles.navItem} ${isActive ? styles.navItemActive : ''}`}
           >
             {item.icon}
-            <span className="font-bold">{item.label}</span>
+            <span className={styles.navItemText}>{item.label}</span>
           </NavLink>
         ))}
       </nav>
 
-      <div className="p-4 mt-auto">
+      <div className={styles.footer}>
         <button
           onClick={signOut}
-          className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all duration-300 font-bold"
+          className={styles.signOutBtn}
         >
           <LogOut size={22} />
           <span>Sign Out</span>

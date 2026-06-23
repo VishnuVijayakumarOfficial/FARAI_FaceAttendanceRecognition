@@ -10,6 +10,7 @@ import {
   ScanFace,
   Clock
 } from 'lucide-react';
+import styles from './AttendanceReports.module.css';
 
 const AttendanceReports = () => {
   const [allEmployees, setAllEmployees] = useState([]);
@@ -91,17 +92,17 @@ const AttendanceReports = () => {
   };
 
   return (
-    <div className="p-8 bg-slate-50 dark:bg-slate-800/50 min-h-screen font-outfit">
+    <div className={styles.pageContainer}>
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+      <div className={styles.headerWrapper}>
         <div>
-          <h2 className="text-3xl font-black text-slate-900 dark:text-white">Attendance Reports</h2>
-          <p className="text-slate-500 font-medium">Monitor and export daily attendance logs</p>
+          <h2 className={styles.pageTitle}>Attendance Reports</h2>
+          <p className={styles.pageSubtitle}>Monitor and export daily attendance logs</p>
         </div>
         <button
           onClick={exportCSV}
-          className="flex items-center gap-2 px-6 py-3.5 bg-emerald-50 dark:bg-emerald-500/100 text-white rounded-2xl font-black hover:bg-emerald-600 transition-all shadow-lg shadow-emerald-500/20 active:scale-95"
+          className={styles.exportBtn}
         >
           <FileSpreadsheet size={20} />
           Export CSV
@@ -109,32 +110,32 @@ const AttendanceReports = () => {
       </div>
 
       {/* Summary Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="p-6 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-primary-50 dark:bg-primary-500/10 flex items-center justify-center flex-shrink-0">
-            <UserCheck size={28} className="text-primary-500" />
+      <div className={styles.statsGrid}>
+        <div className={styles.statCard}>
+          <div className={styles.iconPresent}>
+            <UserCheck size={28} />
           </div>
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Present</p>
-            <p className="text-4xl font-black text-slate-900 dark:text-white">{loading ? '...' : presentCount}</p>
+            <p className={styles.statLabel}>Present</p>
+            <p className={styles.statValue}>{loading ? '...' : presentCount}</p>
           </div>
         </div>
-        <div className="p-6 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-rose-50 dark:bg-rose-500/10 flex items-center justify-center flex-shrink-0">
-            <UserX size={28} className="text-rose-500" />
+        <div className={styles.statCard}>
+          <div className={styles.iconAbsent}>
+            <UserX size={28} />
           </div>
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Absent</p>
-            <p className="text-4xl font-black text-slate-900 dark:text-white">{loading ? '...' : absentCount}</p>
+            <p className={styles.statLabel}>Absent</p>
+            <p className={styles.statValue}>{loading ? '...' : absentCount}</p>
           </div>
         </div>
-        <div className="p-6 bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-sm flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-500/10 flex items-center justify-center flex-shrink-0">
-            <ScanFace size={28} className="text-amber-500" />
+        <div className={styles.statCard}>
+          <div className={styles.iconRate}>
+            <ScanFace size={28} />
           </div>
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">Attendance Rate</p>
-            <p className="text-4xl font-black text-slate-900 dark:text-white">
+            <p className={styles.statLabel}>Attendance Rate</p>
+            <p className={styles.statValue}>
               {loading || allEmployees.length === 0 ? '...' : `${Math.round((presentCount / allEmployees.length) * 100)}%`}
             </p>
           </div>
@@ -142,36 +143,32 @@ const AttendanceReports = () => {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
-        <div className="relative">
-          <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+      <div className={styles.filtersWrapper}>
+        <div className={styles.filterGroup}>
+          <Calendar className={styles.filterIcon} size={18} />
           <input
             type="date"
-            className="input-field pl-12 bg-white dark:bg-slate-900"
+            className={styles.inputField}
             value={dateFilter}
             onChange={(e) => setDateFilter(e.target.value)}
           />
         </div>
-        <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+        <div className={styles.filterGroup}>
+          <Search className={styles.filterIcon} size={18} />
           <input
             type="text"
             placeholder="Search by name, ID or department..."
-            className="input-field pl-12 bg-white dark:bg-slate-900"
+            className={styles.inputField}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <div className="flex gap-2">
+        <div className={styles.statusButtonGroup}>
           {['All', 'Present', 'Absent'].map(s => (
             <button
               key={s}
               onClick={() => setStatusFilter(s)}
-              className={`px-5 py-3 rounded-xl font-black text-sm transition-all border ${
-                statusFilter === s
-                  ? 'bg-primary-50 dark:bg-primary-500/100 text-white border-primary-500 shadow-lg shadow-primary-500/20'
-                  : 'bg-white dark:bg-slate-900 text-slate-500 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:bg-slate-800/50'
-              }`}
+              className={`${styles.statusBtn} ${statusFilter === s ? styles.statusBtnActive : ''}`}
             >
               {s}
             </button>
@@ -180,87 +177,79 @@ const AttendanceReports = () => {
       </div>
 
       {/* Table */}
-      <div className="bg-white dark:bg-slate-900 rounded-[2rem] border border-slate-100 dark:border-slate-800 shadow-xl overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
-            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-400 text-xs font-bold uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">
+      <div className={styles.tableContainer}>
+        <div className={styles.tableScroll}>
+          <table className={styles.table}>
+            <thead className={styles.thead}>
               <tr>
-                <th className="px-8 py-5">Employee</th>
-                <th className="px-8 py-5">ID</th>
-                <th className="px-8 py-5">Department</th>
-                <th className="px-8 py-5">Login Time</th>
-                <th className="px-8 py-5">Face AI</th>
-                <th className="px-8 py-5">Status</th>
+                <th className={styles.th}>Employee</th>
+                <th className={styles.th}>ID</th>
+                <th className={styles.th}>Department</th>
+                <th className={styles.th}>Login Time</th>
+                <th className={styles.th}>Face AI</th>
+                <th className={styles.th}>Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50">
+            <tbody className={styles.tbody}>
               {loading ? (
                 <tr>
-                  <td colSpan="6" className="px-8 py-20 text-center">
+                  <td colSpan="6" className={styles.tdEmpty}>
                     <Loader2 className="animate-spin inline-block text-primary-500" size={32} />
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="px-8 py-20 text-center text-slate-400 font-bold italic">
+                  <td colSpan="6" className={styles.tdEmpty}>
                     No records found.
                   </td>
                 </tr>
               ) : filtered.map((rec) => (
-                <tr key={rec.id} className="hover:bg-slate-50 dark:bg-slate-800/50 transition-all">
+                <tr key={rec.id} className={styles.tr}>
                   {/* Employee */}
-                  <td className="px-8 py-5">
-                    <div className="flex items-center gap-3">
+                  <td className={styles.td}>
+                    <div className={styles.empWrapper}>
                       {rec.face_image ? (
-                        <div className="w-11 h-11 rounded-2xl overflow-hidden border-2 border-primary-100 shadow-inner flex-shrink-0">
-                          <img src={rec.face_image} alt={rec.name} className="w-full h-full object-cover" />
-                        </div>
+                        <img src={rec.face_image} alt={rec.name} className={styles.avatarImg} />
                       ) : (
-                        <div className="w-11 h-11 rounded-2xl bg-primary-100 flex items-center justify-center font-black text-primary-600 text-lg flex-shrink-0">
+                        <div className={styles.avatarFallback}>
                           {rec.name.charAt(0)}
                         </div>
                       )}
                       <div>
-                        <p className="font-black text-slate-800 dark:text-slate-200">{rec.name}</p>
-                        <p className="text-xs text-slate-400 font-medium">{rec.designation}</p>
+                        <p className={styles.empName}>{rec.name}</p>
+                        <p className={styles.empDesig}>{rec.designation}</p>
                       </div>
                     </div>
                   </td>
                   {/* ID */}
-                  <td className="px-8 py-5">
-                    <span className="font-bold text-slate-500 text-sm">#{rec.employee_id}</span>
+                  <td className={styles.td}>
+                    <span className={styles.tdId}>#{rec.employee_id}</span>
                   </td>
                   {/* Department */}
-                  <td className="px-8 py-5">
-                    <span className="font-bold text-slate-700 dark:text-slate-300">{rec.department}</span>
+                  <td className={styles.td}>
+                    <span className={styles.tdDept}>{rec.department}</span>
                   </td>
                   {/* Login Time */}
-                  <td className="px-8 py-5">
+                  <td className={styles.td}>
                     {rec.login_time ? (
-                      <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 font-bold text-sm">
-                        <Clock size={14} className="text-primary-500" />
+                      <div className={styles.loginTimeWrapper}>
+                        <Clock size={14} className={styles.iconClock} />
                         {new Date(rec.login_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     ) : (
-                      <span className="text-slate-300 font-bold text-sm">—</span>
+                      <span className={styles.timeEmpty}>—</span>
                     )}
                   </td>
                   {/* Face AI */}
-                  <td className="px-8 py-5">
-                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
-                      rec.face_descriptor ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 'bg-rose-50 dark:bg-rose-500/10 text-rose-500'
-                    }`}>
+                  <td className={styles.td}>
+                    <div className={rec.face_descriptor ? styles.pillReg : styles.pillUnreg}>
                       <ScanFace size={11} />
                       {rec.face_descriptor ? 'Registered' : 'Not Set'}
                     </div>
                   </td>
                   {/* Status */}
-                  <td className="px-8 py-5">
-                    <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${
-                      rec.status === 'Present'
-                        ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600'
-                        : 'bg-rose-50 dark:bg-rose-500/10 text-rose-500'
-                    }`}>
+                  <td className={styles.td}>
+                    <span className={rec.status === 'Present' ? styles.pillPresent : styles.pillAbsent}>
                       {rec.status === 'Present' ? <UserCheck size={11} /> : <UserX size={11} />}
                       {rec.status}
                     </span>
@@ -273,11 +262,11 @@ const AttendanceReports = () => {
 
         {/* Footer summary */}
         {!loading && (
-          <div className="px-8 py-4 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+          <div className={styles.tableFooter}>
+            <p className={styles.footerText}>
               Showing {filtered.length} of {allEmployees.length} employees
             </p>
-            <p className="text-xs font-bold text-slate-400">
+            <p className={styles.footerText}>
               Date: {new Date(dateFilter).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
             </p>
           </div>

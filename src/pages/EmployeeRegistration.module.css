@@ -1,0 +1,237 @@
+.pageContainer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  font-family: 'Outfit', sans-serif;
+}
+
+:global(.dark) .pageContainer {
+  background-color: #020617;
+}
+
+.contentWrapper {
+  max-width: 42rem;
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin-bottom: 1rem;
+}
+
+:global(.dark) .title {
+  color: white;
+}
+
+.subtitle {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.card {
+  background-color: white;
+  border-radius: 3rem;
+  border: 1px solid #f1f5f9;
+  padding: 2.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+:global(.dark) .card {
+  background-color: #0f172a;
+  border-color: #1e293b;
+}
+
+.videoWrapper {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background-color: #f1f5f9;
+  margin-bottom: 2.5rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+}
+
+:global(.dark) .videoWrapper {
+  background-color: #1e293b;
+  border-color: #334155;
+}
+
+.loadingOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(15, 23, 42, 0.9);
+  z-index: 10;
+}
+
+.spinIcon {
+  animation: spin 1s linear infinite;
+  color: var(--color-primary-500, #10b981);
+  margin-bottom: 1rem;
+}
+
+.loadingText {
+  color: #94a3b8;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.successOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(16, 185, 129, 0.2);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.successIconWrapper {
+  background-color: #0f172a;
+  padding: 1.5rem;
+  border-radius: 9999px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.successIcon {
+  color: #10b981;
+}
+
+.errorBanner {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: rgba(244, 63, 94, 0.1);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  border-radius: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: #fb7185;
+}
+
+.errorText {
+  font-size: 0.875rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.resetBtn {
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid #e2e8f0;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  color: #475569;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.resetBtn:hover {
+  background-color: #f8fafc;
+}
+
+:global(.dark) .resetBtn {
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+:global(.dark) .resetBtn:hover {
+  background-color: #1e293b;
+}
+
+.captureBtn {
+  flex: 1;
+  padding: 1rem;
+  font-size: 1.125rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background-color: var(--color-primary-500, #10b981);
+  color: white;
+  border: none;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.captureBtn:hover:not(:disabled) {
+  background-color: var(--color-primary-600, #059669);
+}
+
+.captureBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.guidelinesGrid {
+  margin-top: 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.guidelineCard {
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: #f8fafc;
+  border: 1px solid #f1f5f9;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+}
+
+:global(.dark) .guidelineCard {
+  background-color: #0f172a;
+  border-color: #1e293b;
+}
+
+.guidelineLabel {
+  font-size: 0.625rem;
+  color: #94a3b8;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.25rem;
+}
+
+.guidelineValue {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+:global(.dark) .guidelineValue {
+  color: #e2e8f0;
+}

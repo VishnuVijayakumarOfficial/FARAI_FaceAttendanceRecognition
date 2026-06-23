@@ -20,22 +20,21 @@ import {
   BarChart,
   Bar
 } from 'recharts';
-
-// Data is now dynamic
+import styles from './DashboardOverview.module.css';
 
 const StatCard = ({ title, value, icon, trend, trendValue }) => (
-  <div className="p-6 rounded-[2rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all">
-    <div className="flex justify-between items-start mb-4">
-      <div className="p-3 rounded-2xl bg-primary-50 dark:bg-primary-500/10 text-primary-600">
+  <div className={styles.statCard}>
+    <div className={styles.statCardHeader}>
+      <div className={styles.statIconWrapper}>
         {icon}
       </div>
-      <div className={`flex items-center gap-1 text-xs font-bold ${trend === 'up' ? 'text-emerald-500' : 'text-rose-500'}`}>
+      <div className={trend === 'up' ? styles.statTrendUp : styles.statTrendDown}>
         {trend === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
         {trendValue}%
       </div>
     </div>
-    <h3 className="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">{title}</h3>
-    <p className="text-3xl font-black text-slate-900 dark:text-white">{value}</p>
+    <h3 className={styles.statTitle}>{title}</h3>
+    <p className={styles.statValue}>{value}</p>
   </div>
 );
 
@@ -134,7 +133,7 @@ const DashboardOverview = () => {
   }, []);
 
   return (
-    <div className="p-8 bg-slate-50 dark:bg-slate-800/50 min-h-screen font-outfit">
+    <div className={styles.pageContainer}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <StatCard 
           title="Total Employees" 
@@ -166,9 +165,9 @@ const DashboardOverview = () => {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <div className="p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm h-[400px]">
-          <h3 className="text-xl font-bold mb-6 text-slate-800 dark:text-slate-200">Weekly Attendance Trend</h3>
+      <div className={styles.chartsGrid}>
+        <div className={styles.chartCard}>
+          <h3 className={styles.chartTitle}>Weekly Attendance Trend</h3>
           <ResponsiveContainer width="100%" height="85%">
             <AreaChart data={weeklyData}>
               <defs>
@@ -189,8 +188,8 @@ const DashboardOverview = () => {
           </ResponsiveContainer>
         </div>
 
-        <div className="p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm h-[400px]">
-          <h3 className="text-xl font-bold mb-6 text-slate-800 dark:text-slate-200">Attendance by Department (Today)</h3>
+        <div className={styles.chartCard}>
+          <h3 className={styles.chartTitle}>Attendance by Department (Today)</h3>
           <ResponsiveContainer width="100%" height="85%">
             {deptData.length > 0 ? (
               <BarChart data={deptData}>
@@ -204,42 +203,40 @@ const DashboardOverview = () => {
                 <Bar dataKey="count" fill="#10b981" radius={[8, 8, 0, 0]} barSize={40} />
               </BarChart>
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-slate-400 font-medium">No department data available today</div>
+              <div className={styles.noDataText}>No department data available today</div>
             )}
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="p-8 rounded-[2.5rem] bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 shadow-sm">
-        <h3 className="text-xl font-bold mb-6 text-slate-800 dark:text-slate-200">Recent Logins</h3>
-        <div className="overflow-x-auto">
-          <table className="w-full text-left">
+      <div className={styles.tableCard}>
+        <h3 className={styles.chartTitle}>Recent Logins</h3>
+        <div className={styles.tableWrapper}>
+          <table className={styles.table}>
             <thead>
-              <tr className="text-slate-400 text-xs font-bold uppercase tracking-widest border-b border-slate-100 dark:border-slate-800">
-                <th className="pb-4">Employee</th>
-                <th className="pb-4">Time</th>
-                <th className="pb-4">Status</th>
-                <th className="pb-4 text-right">Method</th>
+              <tr className={styles.tableHeadRow}>
+                <th className={styles.th}>Employee</th>
+                <th className={styles.th}>Time</th>
+                <th className={styles.th}>Status</th>
+                <th className={styles.thRight}>Method</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50">
+            <tbody className={styles.tbody}>
               {recentLogins.length > 0 ? recentLogins.map((row, i) => (
-                <tr key={i} className="hover:bg-slate-50 dark:bg-slate-800/50 transition-colors group">
-                  <td className="py-5">
-                    <span className="font-bold text-slate-800 dark:text-slate-200">{row.name}</span>
+                <tr key={i} className={styles.tr}>
+                  <td className={styles.td}>
+                    <span className={styles.tdName}>{row.name}</span>
                   </td>
-                  <td className="py-5 text-slate-500 font-medium">{row.time}</td>
-                  <td className="py-5">
-                    <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                      row.status === 'Present' || row.status === 'On Time' ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600' : 'bg-amber-50 dark:bg-amber-500/10 text-amber-600'
-                    }`}>
+                  <td className={styles.tdTime}>{row.time}</td>
+                  <td className={styles.td}>
+                    <span className={row.status === 'Present' || row.status === 'On Time' ? styles.statusGood : styles.statusWarning}>
                       {row.status}
                     </span>
                   </td>
-                  <td className="py-5 text-right font-bold text-slate-400 text-sm">{row.method}</td>
+                  <td className={styles.tdMethod}>{row.method}</td>
                 </tr>
               )) : (
-                <tr><td colSpan="4" className="py-8 text-center text-slate-400">No recent logins</td></tr>
+                <tr><td colSpan="4" className={styles.emptyState}>No recent logins</td></tr>
               )}
             </tbody>
           </table>

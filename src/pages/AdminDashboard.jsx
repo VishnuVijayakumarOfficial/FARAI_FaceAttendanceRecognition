@@ -4,6 +4,7 @@ import TopBar from '../components/TopBar';
 import DashboardOverview from './DashboardOverview';
 import EmployeeManagement from './EmployeeManagement';
 import AttendanceReports from './AttendanceReports';
+import styles from './AdminDashboard.module.css';
 
 const AdminDashboard = () => {
   const location = useLocation();
@@ -19,16 +20,16 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="flex bg-slate-50 dark:bg-slate-950 min-h-screen">
+    <div className={styles.layout}>
       <Sidebar />
-      <div className="flex-1 flex flex-col ml-72">
+      <div className={styles.contentWrapper}>
         <TopBar title={getTitle()} />
-        <main className="flex-1 overflow-y-auto">
+        <main className={styles.mainArea}>
           <Routes>
             <Route index element={<DashboardOverview />} />
             <Route path="employees" element={<EmployeeManagement />} />
             <Route path="attendance" element={<AttendanceReports />} />
-            <Route path="settings" element={<div className="p-8 dark:text-white">Settings Page coming soon...</div>} />
+            <Route path="settings" element={<div className={styles.settingsPlaceholder}>Settings Page coming soon...</div>} />
           </Routes>
         </main>
       </div>

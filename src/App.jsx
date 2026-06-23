@@ -15,8 +15,8 @@ const ProtectedRoute = ({ children, allowedRole }) => {
   const { user, role, loading } = useAuth();
 
   if (loading) return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
+    <div className="app-loading-container">
+      <div className="app-loading-spinner"></div>
     </div>
   );
 
@@ -30,7 +30,7 @@ function App() {
   return (
     <AuthProvider>
       <Router basename={import.meta.env.BASE_URL}>
-        <div className="min-h-screen bg-slate-50 text-slate-900 font-outfit selection:bg-primary-500/30">
+        <div className="app-container">
           <Routes>
             <Route path="/" element={<Home />} />
             
