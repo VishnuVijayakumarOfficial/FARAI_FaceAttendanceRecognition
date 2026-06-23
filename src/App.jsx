@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './context/AuthProvider';
 import { ThemeProvider } from './context/ThemeProvider';
 import { useAuth } from './hooks/useAuth';
+import { Toaster } from 'react-hot-toast';
 
 // Pages
 import Home from './pages/Home';
@@ -33,6 +34,7 @@ function App() {
       <AuthProvider>
         <Router basename={import.meta.env.BASE_URL}>
           <div className="app-container">
+            <Toaster position="top-right" />
             <Routes>
               <Route path="/" element={<Home />} />
               

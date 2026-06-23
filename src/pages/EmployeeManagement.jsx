@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   RefreshCw
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 import { useAuth } from '../hooks/useAuth';
 import styles from './EmployeeManagement.module.css';
@@ -102,9 +103,9 @@ const EmployeeManagement = () => {
           attendance_start_time: '09:00', attendance_end_time: '10:00'
         });
         setEditingId(null);
-        alert('Employee record updated successfully!');
+        toast.success('Employee record updated successfully!');
       } else {
-        alert(`Error updating employee: ${error.message}`);
+        toast.error(`Error updating employee: ${error.message}`);
       }
     } else {
       const payload = {
@@ -124,9 +125,9 @@ const EmployeeManagement = () => {
           name: '', email: '', employee_id: '', department: '', designation: '', password: '',
           attendance_start_time: '09:00', attendance_end_time: '10:00'
         });
-        alert('Employee record created successfully!');
+        toast.success('Employee record created successfully!');
       } else {
-        alert(`Error creating employee: ${error.message}`);
+        toast.error(`Error creating employee: ${error.message}`);
       }
     }
     setLoading(false);
@@ -158,8 +159,9 @@ const EmployeeManagement = () => {
     const { error } = await supabase.from('employees').delete().eq('id', id);
     if (!error) {
       fetchEmployees();
+      toast.success('Employee deleted successfully!');
     } else {
-      alert(`Error deleting: ${error.message}`);
+      toast.error(`Error deleting: ${error.message}`);
     }
     setLoading(false);
   };

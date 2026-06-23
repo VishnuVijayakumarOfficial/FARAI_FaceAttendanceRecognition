@@ -9,6 +9,7 @@ import {
   ShieldCheck, CheckCircle2, Users, ScanFace,
   Lock, Database, BarChart3, Mail, EyeOff, ArrowRight, Sparkles, Sun, Moon, User, Loader2
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { supabase } from '../lib/supabase';
 import './Home.css';
 
@@ -35,15 +36,18 @@ const Home = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('error') === 'deactivated') {
+      return 'Your account has been deleted or deactivated by the admin.';
+    }
+    return null;
+  });
 
   const phoneRef = useRef(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('error') === 'deactivated') {
-      setError('Your account has been deleted or deactivated by the admin.');
-    }
     if (params.get('register') === 'admin' || window.location.hash === '#login-section' || params.get('error') === 'deactivated') {
       setTimeout(() => {
         const loginSection = document.getElementById('login-section');
@@ -160,7 +164,7 @@ const Home = () => {
             { id: tempId, name, email, password }
           ]);
         if (adminError) throw adminError;
-        alert('Registration successful! You can now log in.');
+        toast.success('Registration successful! You can now log in.');
         setIsAdminRegister(false);
         setPassword('');
         setConfirmPassword('');

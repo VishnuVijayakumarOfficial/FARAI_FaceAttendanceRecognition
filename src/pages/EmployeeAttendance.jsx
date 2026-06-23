@@ -65,7 +65,7 @@ const EmployeeAttendance = () => {
     const init = async () => {
       setLoadingData(true);
 
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('employees')
         .select('*')
         .eq('id', user.id)
@@ -98,7 +98,7 @@ const EmployeeAttendance = () => {
 
     init();
     return () => stopVideo();
-  }, [user.id]);
+  }, [user.id, navigate, signOut]);
 
   const getInitials = (name) => {
     if (!name) return '?';
