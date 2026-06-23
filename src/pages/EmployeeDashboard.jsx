@@ -30,7 +30,7 @@ const EmployeeDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const { data: empData, error } = await supabase
+      const { data: empData } = await supabase
         .from('employees')
         .select('*')
         .eq('id', user.id)
@@ -56,7 +56,7 @@ const EmployeeDashboard = () => {
     };
 
     fetchData();
-  }, [user.id]);
+  }, [user.id, navigate, signOut]);
 
   const isTodayMarked = () => {
     const today = new Date().toISOString().split('T')[0];

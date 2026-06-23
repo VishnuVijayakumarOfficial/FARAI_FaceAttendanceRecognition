@@ -32,7 +32,7 @@ const EmployeeReports = () => {
     const fetchHistory = async () => {
       setLoading(true);
       try {
-        const { data: empData, error: empError } = await supabase
+        const { data: empData } = await supabase
           .from('employees')
           .select('id')
           .eq('id', user.id)
@@ -62,7 +62,7 @@ const EmployeeReports = () => {
     if (user?.id) {
       fetchHistory();
     }
-  }, [user.id]);
+  }, [user?.id, user.id, navigate, signOut]);
 
   // Apply filters
   const filteredRecords = history.filter(rec => {
