@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Lock, Mail, ArrowLeft, Loader2, Users } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
+import styles from './EmployeeLogin.module.css';
 
 const EmployeeLogin = () => {
   const [email, setEmail] = useState('');
@@ -29,60 +30,60 @@ const EmployeeLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 font-outfit relative overflow-hidden">
-      <div className="absolute -top-20 -left-20 w-96 h-96 bg-primary-100 rounded-full blur-[120px] opacity-50"></div>
+    <div className={styles.pageContainer}>
+      <div className={styles.bgBlur}></div>
       
-      <div className="w-full max-w-md">
+      <div className={styles.formWrapper}>
         <button 
           onClick={() => navigate('/')}
-          className="mb-8 flex items-center gap-2 text-slate-500 hover:text-primary-600 font-bold transition-colors group"
+          className={styles.backButton}
         >
-          <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft size={20} className={styles.backIcon} />
           Back to Selection
         </button>
 
-        <div className="bg-white p-10 rounded-[2.5rem] shadow-2xl border border-slate-100">
-          <div className="text-center mb-10">
-            <div className="w-16 h-16 bg-primary-500 rounded-2xl flex items-center justify-center text-white mx-auto mb-6 shadow-xl shadow-primary-500/20">
+        <div className={styles.card}>
+          <div className={styles.header}>
+            <div className={styles.iconWrapper}>
               <Users size={32} />
             </div>
-            <h2 className="text-3xl font-bold text-slate-900 mb-2">Employee Login</h2>
-            <p className="text-slate-500 font-medium">Access your personal dashboard</p>
+            <h2 className={styles.title}>Employee Login</h2>
+            <p className={styles.subtitle}>Access your personal dashboard</p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700 ml-1">Work Email</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+          <form onSubmit={handleLogin}>
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Work Email</label>
+              <div className={styles.inputWrapper}>
+                <Mail className={styles.inputIcon} size={20} />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="input-field pl-12"
+                  className={styles.input}
                   placeholder="name@company.com"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700 ml-1">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+            <div className={styles.formGroup}>
+              <label className={styles.label}>Password</label>
+              <div className={styles.inputWrapper}>
+                <Lock className={styles.inputIcon} size={20} />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="input-field pl-12"
+                  className={styles.input}
                   placeholder="••••••••"
                 />
               </div>
             </div>
 
             {error && (
-              <div className="p-4 bg-red-50 border border-red-100 text-red-600 text-sm font-bold rounded-xl text-center">
+              <div className={styles.errorBanner}>
                 {error}
               </div>
             )}
@@ -90,9 +91,9 @@ const EmployeeLogin = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn-primary py-4 text-lg font-bold flex items-center justify-center gap-2"
+              className={styles.submitBtn}
             >
-              {loading ? <Loader2 className="animate-spin" /> : 'Sign In to Portal'}
+              {loading ? <Loader2 className={styles.spinIcon} size={20} /> : 'Sign In to Portal'}
             </button>
 
             <button
@@ -101,15 +102,15 @@ const EmployeeLogin = () => {
                 signInAsDemo('employee');
                 navigate('/employee/dashboard');
               }}
-              className="w-full py-2 text-sm font-bold text-slate-400 hover:text-primary-600 transition-colors"
+              className={styles.demoBtn}
             >
               Try Demo Login
             </button>
           </form>
 
-          <div className="mt-8 pt-8 border-t border-slate-100 text-center">
-            <p className="text-sm text-slate-400 font-medium">
-              Don't have an account? <span className="text-primary-600 font-bold">Contact Admin</span>
+          <div className={styles.footer}>
+            <p className={styles.footerText}>
+              Don't have an account? <span className={styles.footerLink}>Contact Admin</span>
             </p>
           </div>
         </div>

@@ -156,12 +156,8 @@ const Home = () => {
         if (loginType === 'admin') {
           navigate('/admin/dashboard');
         } else {
-          // Check if employee has registered their face
-          if (!userData.face_descriptor) {
-            navigate('/employee/register-face');
-          } else {
-            navigate('/employee/dashboard');
-          }
+          // Navigate directly to dashboard, bypassing the dedicated register-face page
+          navigate('/employee/dashboard');
         }
       } catch (err) {
         setError(err.message || 'Invalid credentials');

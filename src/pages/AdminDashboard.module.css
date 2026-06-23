@@ -1,0 +1,45 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f8fafc;
+  transition: background-color 0.3s ease;
+}
+
+:global(.dark) .layout {
+  background-color: #020617;
+}
+
+.contentWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 18rem; /* 72 units -> 18rem -> matches sidebar width */
+}
+
+@media (max-width: 768px) {
+  .contentWrapper {
+    margin-left: 16rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .layout {
+    flex-direction: column;
+  }
+  .contentWrapper {
+    margin-left: 0;
+  }
+}
+
+.mainArea {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.settingsPlaceholder {
+  padding: 2rem;
+}
+
+:global(.dark) .settingsPlaceholder {
+  color: white;
+}
