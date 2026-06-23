@@ -22,7 +22,7 @@ import { useTheme } from '../hooks/useTheme';
 import styles from './EmployeeAttendance.module.css';
 
 const EmployeeAttendance = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const videoRef = useRef(null);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -65,11 +65,18 @@ const EmployeeAttendance = () => {
     const init = async () => {
       setLoadingData(true);
 
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('employees')
         .select('*')
         .eq('id', user.id)
-        .single();
+        .maybeSingle();
+
+      if (user.id !== 'demo-user-id' && !data) {
+        signOut();
+        navigate('/?error=deactivated#login-section');
+        return;
+      }
+
       setEmployeeInfo(data);
 
       const today = new Date().toISOString().split('T')[0];
@@ -218,7 +225,7 @@ const EmployeeAttendance = () => {
   const withinWindow = isWithinTimeRange();
   const initials = getInitials(employeeInfo?.name);
 
-  const hideRegistrationStep = mode === 'attendance' && faceRegistered;
+  const hideRegistrationStep = mode === 'attendance';
   const hideAttendanceStep = mode === 'register';
 
   return (
@@ -274,19 +281,23 @@ const EmployeeAttendance = () => {
                   <ScanFace size={12} />
                   {faceRegistered ? 'Face Registered' : 'Face Not Registered'}
                 </span>
-                <span className={`${styles.pill} ${alreadyMarked ? styles.pillSuccess : withinWindow ? styles.pillPrimary : styles.pillError}`}>
-                  <Clock size={12} />
-                  {alreadyMarked ? 'Present Today' : withinWindow ? 'Window Open' : 'Window Closed'}
-                </span>
+                {mode !== 'register' && (
+                  <span className={`${styles.pill} ${alreadyMarked ? styles.pillSuccess : withinWindow ? styles.pillPrimary : styles.pillError}`}>
+                    <Clock size={12} />
+                    {alreadyMarked ? 'Present Today' : withinWindow ? 'Window Open' : 'Window Closed'}
+                  </span>
+                )}
               </div>
             </div>
 
-            <div className={`${styles.timeWindow} ${withinWindow ? styles.timeWindowOpen : ''}`}>
-              <p className={styles.timeLabel}>Shift Window</p>
-              <p className={styles.timeValue}>{employeeInfo?.attendance_start_time}</p>
-              <p className={styles.timeTo}>to</p>
-              <p className={styles.timeValue}>{employeeInfo?.attendance_end_time}</p>
-            </div>
+            {mode !== 'register' && (
+              <div className={`${styles.timeWindow} ${withinWindow ? styles.timeWindowOpen : ''}`}>
+                <p className={styles.timeLabel}>Shift Window</p>
+                <p className={styles.timeValue}>{employeeInfo?.attendance_start_time}</p>
+                <p className={styles.timeTo}>to</p>
+                <p className={styles.timeValue}>{employeeInfo?.attendance_end_time}</p>
+              </div>
+            )}
           </div>
         </div>
 
@@ -386,9 +397,11 @@ const EmployeeAttendance = () => {
             {!hideRegistrationStep && (
               <div className={styles.actionCard}>
                 <div className={styles.actionHeader}>
-                  <div className={`${styles.actionNumber} ${faceRegistered ? styles.actionNumberActive : styles.actionNumberActive}`}>
-                    1
-                  </div>
+                  {mode !== 'register' && (
+                    <div className={`${styles.actionNumber} ${faceRegistered ? styles.actionNumberActive : styles.actionNumberActive}`}>
+                      1
+                    </div>
+                  )}
                   <div>
                     <h2 className={styles.actionTitle}>Register Your Face</h2>
                     <p className={styles.actionSub}>One-time setup to enable attendance</p>
@@ -455,11 +468,13 @@ const EmployeeAttendance = () => {
             {!hideAttendanceStep && (
               <div className={`${styles.actionCard} ${!faceRegistered ? styles.actionCardDisabled : ''}`}>
                 <div className={styles.actionHeader}>
-                  <div className={`${styles.actionNumber} ${
-                    attendSuccess || alreadyMarked || faceRegistered ? styles.actionNumberActive : styles.actionNumberDisabled
-                  }`}>
-                    2
-                  </div>
+                  {mode !== 'attendance' && (
+                    <div className={`${styles.actionNumber} ${
+                      attendSuccess || alreadyMarked || faceRegistered ? styles.actionNumberActive : styles.actionNumberDisabled
+                    }`}>
+                      2
+                    </div>
+                  )}
                   <div>
                     <h2 className={styles.actionTitle}>Mark Attendance</h2>
                     <p className={styles.actionSub}>

@@ -7,7 +7,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../hooks/useTheme';
 import {
   ShieldCheck, CheckCircle2, Users, ScanFace,
-  Lock, Cloud, BarChart3, Mail, EyeOff, ArrowRight, Sparkles, Sun, Moon, User, Loader2
+  Lock, Database, BarChart3, Mail, EyeOff, ArrowRight, Sparkles, Sun, Moon, User, Loader2
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import './Home.css';
@@ -22,8 +22,14 @@ const Home = () => {
   const { isDarkMode, toggleTheme } = useTheme();
 
   // Login Form State
-  const [loginType, setLoginType] = useState('employee');
-  const [isAdminRegister, setIsAdminRegister] = useState(false);
+  const [loginType, setLoginType] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('register') === 'admin' ? 'admin' : 'employee';
+  });
+  const [isAdminRegister, setIsAdminRegister] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('register') === 'admin';
+  });
   const [name, setName] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
@@ -32,6 +38,19 @@ const Home = () => {
   const [error, setError] = useState(null);
 
   const phoneRef = useRef(null);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('error') === 'deactivated') {
+      setError('Your account has been deleted or deactivated by the admin.');
+    }
+    if (params.get('register') === 'admin' || window.location.hash === '#login-section' || params.get('error') === 'deactivated') {
+      setTimeout(() => {
+        const loginSection = document.getElementById('login-section');
+        if (loginSection) loginSection.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+  }, []);
 
   useGSAP(() => {
     // Hero Animations
@@ -152,7 +171,7 @@ const Home = () => {
       }
     } else {
       try {
-        const userData = await signInManually(email, password, loginType);
+        await signInManually(email, password, loginType);
         if (loginType === 'admin') {
           navigate('/admin/dashboard');
         } else {
@@ -316,7 +335,7 @@ const Home = () => {
             <div className="steps-grid">
               {[
                 { step: 1, icon: <ScanFace size={32} />, title: "Register Face", desc: "One-time secure 3D face mapping during onboarding." },
-                { step: 2, icon: <Cloud size={32} />, title: "Cloud Sync", desc: "Encrypted template stored in Supabase secure vault." },
+                { step: 2, icon: <Database size={32} />, title: "Secure Storage", desc: "Face template securely stored in the database." },
                 { step: 3, icon: <CheckCircle2 size={32} />, title: "Instant Verify", desc: "Sub-second verification for seamless clock-in." },
               ].map((s, i) => (
                 <div key={i} className="step-card">

@@ -20,7 +20,7 @@ const EmployeeLogin = () => {
     setError('');
 
     try {
-      const empData = await signInManually(email, password, 'employee');
+      await signInManually(email, password, 'employee');
       navigate('/employee/dashboard');
     } catch (err) {
       setError(err.message);
