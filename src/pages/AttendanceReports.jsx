@@ -10,9 +10,11 @@ import {
   ScanFace,
   Clock
 } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
 import styles from './AttendanceReports.module.css';
 
 const AttendanceReports = () => {
+  const { user } = useAuth();
   const [allEmployees, setAllEmployees] = useState([]);
   const [attendanceMap, setAttendanceMap] = useState({});
   const [loading, setLoading] = useState(true);
@@ -25,16 +27,23 @@ const AttendanceReports = () => {
       setLoading(true);
 
       // 1. Fetch all employees
-      const { data: empData } = await supabase
+      let empQuery = supabase
         .from('employees')
-        .select('id, name, employee_id, department, designation, face_image, face_descriptor')
-        .order('name', { ascending: true });
+        .select('id, name, employee_id, department, designation, face_image, face_descriptor');
+      if (user && user.id !== 'demo-user-id') {
+        empQuery = empQuery.eq('admin_id', user.id);
+      }
+      const { data: empData } = await empQuery.order('name', { ascending: true });
 
       // 2. Fetch attendance for selected date
-      const { data: attData } = await supabase
+      let attQuery = supabase
         .from('attendance')
-        .select('employee_id, login_time, status')
+        .select('employee_id, login_time, status, employees!inner(admin_id)')
         .eq('date', dateFilter);
+      if (user && user.id !== 'demo-user-id') {
+        attQuery = attQuery.eq('employees.admin_id', user.id);
+      }
+      const { data: attData } = await attQuery;
 
       // Build a map: employee_id -> attendance record
       const map = {};
@@ -48,7 +57,7 @@ const AttendanceReports = () => {
     };
 
     fetchData();
-  }, [dateFilter]);
+  }, [dateFilter, user]);
 
   // Merge employees with attendance status
   const mergedRecords = allEmployees.map(emp => ({

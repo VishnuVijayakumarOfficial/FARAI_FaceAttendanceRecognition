@@ -5,19 +5,17 @@ import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../hooks/useTheme';
 import { 
   Calendar, 
-  Clock, 
   CheckCircle2, 
   LogOut, 
   User, 
-  ArrowRight,
-  TrendingUp,
+  TrendingUp, 
   ScanFace,
   Camera,
-  AlertTriangle,
   Loader2,
-  ShieldCheck,
   Sun,
-  Moon
+  Moon,
+  Edit,
+  Check
 } from 'lucide-react';
 import styles from './EmployeeDashboard.module.css';
 
@@ -32,11 +30,17 @@ const EmployeeDashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const { data: empData } = await supabase
+      const { data: empData, error } = await supabase
         .from('employees')
         .select('*')
         .eq('id', user.id)
-        .single();
+        .maybeSingle();
+
+      if (user.id !== 'demo-user-id' && !empData) {
+        signOut();
+        navigate('/?error=deactivated#login-section');
+        return;
+      }
 
       setEmployeeInfo(empData);
 
@@ -89,28 +93,30 @@ const EmployeeDashboard = () => {
     <div className={styles.pageContainer}>
       <div className={styles.contentWrapper}>
 
-        {/* Top Navbar */}
-        <nav className={styles.navbar}>
-          <div className={styles.brandWrapper}>
-            <div className={styles.brandIcon}>
-              <ScanFace size={24} />
+        {/* Unified Header */}
+        <header className={styles.headerWrapper}>
+          <div className={styles.headerTop}>
+            <div className={styles.brandWrapper}>
+              <div className={styles.brandIcon}>
+                <ScanFace size={24} />
+              </div>
+              <div>
+                <h1 className={styles.brandTitle}>FAR<span className={styles.brandHighlight}>AI</span></h1>
+                <p className={styles.brandSubtitle}>Employee Portal</p>
+              </div>
             </div>
-            <div>
-              <h1 className={styles.brandTitle}>FAR<span className={styles.brandHighlight}>AI</span></h1>
-              <p className={styles.brandSubtitle}>Employee Portal</p>
+            
+            <div className={styles.navActions}>
+              <button onClick={toggleTheme} className={styles.themeBtn}>
+                {isDarkMode ? <Sun size={20} color="#f59e0b" /> : <Moon size={20} />}
+              </button>
+              <button onClick={signOut} className={styles.logoutBtn}>
+                <LogOut size={20} />
+              </button>
             </div>
           </div>
-          
-          <div className={styles.navActions}>
-            <button onClick={toggleTheme} className={styles.themeBtn}>
-              {isDarkMode ? <Sun size={20} color="#f59e0b" /> : <Moon size={20} />}
-            </button>
-          </div>
-        </nav>
 
-        {/* Header */}
-        <header className={styles.header}>
-          <div className={styles.headerProfile}>
+          <div className={styles.headerBottom}>
             {employeeInfo?.face_image ? (
               <div className={styles.avatarImgWrapper}>
                 <img src={employeeInfo.face_image} alt={employeeInfo.name} className={styles.avatarImg} />
@@ -126,128 +132,105 @@ const EmployeeDashboard = () => {
               <p className={styles.employeeInfo}>{employeeInfo?.designation} • {employeeInfo?.department}</p>
             </div>
           </div>
-          <button onClick={signOut} className={styles.logoutBtn}>
-            <LogOut size={24} />
-          </button>
         </header>
 
-        {/* Face Registration Warning Banner */}
-        {!isFaceRegistered() && (
-          <div className={styles.warningBanner}>
-            <div className={styles.warningContent}>
-              <div className={styles.warningIconWrapper}>
-                <AlertTriangle size={24} className={styles.warningIcon} />
+
+
+        {/* Face Registration Status Card - Top Level */}
+        <div className={styles.topStatusCard}>
+          <h3 className={styles.topStatusCardTitle}>Face Registration Status</h3>
+          {isFaceRegistered() ? (
+            <div className={styles.topStatusContent}>
+              <div className={styles.topStatusLeft}>
+                <div className={styles.concentricOuter}>
+                  <div className={styles.concentricInner}>
+                    <div className={styles.cameraBox}>
+                      <Camera size={24} color="white" />
+                    </div>
+                    <div className={styles.smallCheckBadge}>
+                      <Check size={14} strokeWidth={4} />
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className={styles.topStatusGoodTitle}>
+                    <CheckCircle2 size={20} className={styles.topStatusCheckIcon} />
+                    Face Registered Successfully
+                  </h4>
+                  <p className={styles.topStatusGoodSubtext}>Your face is registered and ready for attendance verification.</p>
+                  <p className={styles.topStatusDate}>
+                    <Calendar size={14} className={styles.calendarIconGreen} /> Last updated: {new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}, {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className={styles.warningTitle}>Face Not Registered Yet</p>
-                <p className={styles.warningDesc}>You need to register your face before marking attendance. Click the button to get started.</p>
-              </div>
+              <button
+                onClick={() => navigate('/employee/attendance?mode=register')}
+                className={styles.editFaceBtn}
+              >
+                <Edit size={16} />
+                Edit Face
+              </button>
             </div>
-            <button
-              onClick={() => navigate('/employee/attendance?mode=register')}
-              className={styles.warningActionBtn}
-            >
-              <Camera size={20} />
-              Register Face
-            </button>
-          </div>
-        )}
+          ) : (
+            <div className={styles.topStatusContent}>
+              <div className={styles.topStatusLeft}>
+                 <div className={styles.largeIconWrapperFallback}>
+                   <Camera size={40} className={styles.largeIconCameraFallback} />
+                 </div>
+                 <div>
+                   <h4 className={styles.topStatusBadTitle}>No Face Registered</h4>
+                   <p className={styles.topStatusBadSubtext}>Register your face to start marking attendance.</p>
+                 </div>
+              </div>
+              <button
+                onClick={() => navigate('/employee/attendance?mode=register')}
+                className={styles.registerFaceBtn}
+              >
+                <Camera size={16} />
+                Register Face Now
+              </button>
+            </div>
+          )}
+        </div>
 
         <div className={styles.gridContainer}>
           {/* Left Column */}
           <div className={styles.leftColumn}>
 
-            {/* Attendance Action Card */}
-            <div className={styles.actionCard}>
-              <h2 className={styles.actionCardTitle}>Daily Attendance</h2>
-              <p className={styles.actionCardDesc}>Verify your identity with AI face scanning.</p>
+            {/* Daily Attendance Action Card */}
+            <div className={styles.dailyAttendanceCard}>
+              <h2 className={styles.dailyAttendanceTitle}>Daily Attendance</h2>
+              <p className={styles.dailyAttendanceDesc}>Mark your attendance using AI face recognition.</p>
 
-              {isTodayMarked() ? (
-                <div className={styles.markedStatus}>
-                  <CheckCircle2 size={40} style={{ margin: '0 auto 0.75rem' }} />
-                  <p className={styles.markedTitle}>Attendance Marked!</p>
-                  <p className={styles.markedDesc}>Status: Present</p>
-                </div>
-              ) : (
-                <button
-                  onClick={() => navigate('/employee/attendance?mode=attendance')}
-                  className={styles.actionBtn}
-                >
-                  {isFaceRegistered() ? (
-                    <>Verify &amp; Mark Now <ArrowRight size={22} /></>
-                  ) : (
-                    <><Camera size={22} /> Register Face &amp; Mark Attendance</>
-                  )}
-                </button>
-              )}
-            </div>
-
-            {/* Face Registration Status Card */}
-            <div className={styles.statusCard}>
-              <h3 className={styles.statusCardTitle}>
-                <ScanFace size={20} color="#10b981" />
-                Face AI Status
-              </h3>
-              {isFaceRegistered() ? (
+              <div className={styles.todayStatusBox}>
                 <div>
-                  <div className={styles.statusRow}>
-                    {employeeInfo?.face_image ? (
-                      <div className={styles.statusIconWrapper}>
-                        <img src={employeeInfo.face_image} alt="Registered face" className={styles.statusIconImg} />
+                  <p className={styles.todayStatusLabel}>Today's Status</p>
+                  <div className={styles.todayStatusFlex}>
+                    {isTodayMarked() ? (
+                      <div className={styles.checkedInRow}>
+                        <CheckCircle2 size={24} color="#10b981" />
+                        <span className={styles.checkedInText}>Checked In</span>
                       </div>
                     ) : (
-                      <div className={styles.statusIconFallback}>
-                        <ShieldCheck size={36} color="#10b981" />
-                      </div>
+                      <span className={styles.notCheckedInText}>Not Checked In</span>
                     )}
-                    <div>
-                      <p className={styles.statusGoodText}>Face Registered ✓</p>
-                      <p className={styles.statusGoodSubtext}>Your biometric data is securely saved.</p>
-                    </div>
                   </div>
-                  <button
-                    onClick={() => navigate('/employee/attendance?mode=register')}
-                    className={styles.manageFaceBtn}
-                  >
-                    <ScanFace size={16} />
-                    Manage Face Registration
-                  </button>
                 </div>
-              ) : (
-                <div className={styles.unregisteredWrapper}>
-                  <div className={styles.unregisteredIconBox}>
-                    <Camera size={32} color="#f59e0b" />
-                  </div>
-                  <p className={styles.unregisteredTitle}>No Face Registered</p>
-                  <p className={styles.unregisteredSubtext}>Register your face to start marking attendance.</p>
-                  <button
-                    onClick={() => navigate('/employee/attendance?mode=register')}
-                    className={styles.registerNowBtn}
-                  >
-                    <Camera size={16} />
-                    Register Face Now
-                  </button>
-                </div>
-              )}
-            </div>
-
-            {/* Work Schedule Card */}
-            <div className={styles.scheduleCard}>
-              <h3 className={styles.statusCardTitle}>
-                <Clock size={20} color="#10b981" />
-                Work Schedule
-              </h3>
-              <div>
-                <div className={styles.scheduleRow}>
-                  <span className={styles.scheduleLabel}>Shift Start</span>
-                  <span className={styles.scheduleValue}>{employeeInfo?.attendance_start_time}</span>
-                </div>
-                <div className={styles.scheduleRow}>
-                  <span className={styles.scheduleLabel}>Shift End</span>
-                  <span className={styles.scheduleValue}>{employeeInfo?.attendance_end_time}</span>
+                <div className={styles.todayStatusTime}>
+                  <p className={styles.timeBig}>{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                  <p className={styles.dateSmall}>{new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
                 </div>
               </div>
+
+              <button
+                onClick={() => navigate(isFaceRegistered() ? '/employee/attendance?mode=attendance' : '/employee/attendance?mode=register')}
+                className={styles.markAttendanceBtn}
+              >
+                <Camera size={18} />
+                Mark Attendance
+              </button>
             </div>
+
           </div>
 
           {/* Right Column - Attendance History */}
@@ -271,25 +254,32 @@ const EmployeeDashboard = () => {
                 ) : history.map((record) => (
                   <div key={record.id} className={styles.historyItem}>
                     <div className={styles.historyItemLeft}>
-                      <div className={styles.historyIcon}>
-                        <Calendar size={26} />
+                      <div className={record.status === 'Present' ? styles.historyIconPresent : styles.historyIconAbsent}>
+                        <Calendar size={18} />
                       </div>
                       <div>
                         <p className={styles.historyDate}>
-                          {new Date(record.date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}
+                          {new Date(record.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+                          {new Date(record.date).toISOString().split('T')[0] === new Date().toISOString().split('T')[0] && (
+                            <span className={styles.todayText}> (Today)</span>
+                          )}
                         </p>
-                        <div className={styles.historyTime}>
-                          <Clock size={14} />
-                          Logged at: {new Date(record.login_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </div>
                       </div>
                     </div>
                     <span className={record.status === 'Present' ? styles.statusPillPresent : styles.statusPillAbsent}>
-                      {record.status}
+                      {record.status === 'Present' ? '• Present' : '• Absent'}
                     </span>
                   </div>
                 ))}
               </div>
+              
+              {history.length > 0 && (
+                <div className={styles.historyFooter}>
+                  <button className={styles.viewAllBtn} onClick={() => navigate('/employee/reports')}>
+                    View All History &rarr;
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>

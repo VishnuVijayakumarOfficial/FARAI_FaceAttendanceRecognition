@@ -17,7 +17,7 @@ import { useAuth } from '../hooks/useAuth';
 import styles from './EmployeeManagement.module.css';
 
 const EmployeeManagement = () => {
-  useAuth();
+  const { user } = useAuth();
   const [employees, setEmployees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -38,16 +38,27 @@ const EmployeeManagement = () => {
   const fetchEmployees = async () => {
     setLoading(true);
     
-    const { data: empData, error: empError } = await supabase
+    let query = supabase
       .from('employees')
-      .select('*')
+      .select('*');
+
+    if (user && user.id !== 'demo-user-id') {
+      query = query.eq('admin_id', user.id);
+    }
+
+    const { data: empData, error: empError } = await query
       .order('created_at', { ascending: false });
 
     const today = new Date().toISOString().split('T')[0];
-    const { data: attData } = await supabase
+    let attQuery = supabase
       .from('attendance')
-      .select('employee_id, status')
+      .select('employee_id, status, employees!inner(admin_id)')
       .eq('date', today);
+
+    if (user && user.id !== 'demo-user-id') {
+      attQuery = attQuery.eq('employees.admin_id', user.id);
+    }
+    const { data: attData } = await attQuery;
 
     if (!empError && empData) {
       const attendanceMap = {};
@@ -70,6 +81,7 @@ const EmployeeManagement = () => {
       await fetchEmployees();
     };
     init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAddEmployee = async (e) => {
@@ -97,7 +109,8 @@ const EmployeeManagement = () => {
     } else {
       const payload = {
         ...formData,
-        id: crypto.randomUUID()
+        id: crypto.randomUUID(),
+        admin_id: user && user.id !== 'demo-user-id' ? user.id : null
       };
 
       const { error } = await supabase
@@ -336,7 +349,7 @@ const EmployeeManagement = () => {
                 </div>
               </div>
               <p className={styles.warningNote}>
-                * After creating the employee here, you must manually create an account with this email/password in the Supabase Auth dashboard to enable login.
+                * The employee can immediately log in to the portal using this email and password.
               </p>
               <div className={styles.formActions}>
                 <button 

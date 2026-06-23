@@ -106,3 +106,18 @@ body {
     font-size: 0.875rem;
   }
 }
+
+/* Custom Utility Classes */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+

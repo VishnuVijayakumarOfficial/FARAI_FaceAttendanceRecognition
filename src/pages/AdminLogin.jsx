@@ -111,7 +111,7 @@ const AdminLogin = () => {
 
           <div className={styles.footer}>
              <p className={styles.footerText}>
-                Don't have an admin account? <button onClick={() => navigate('/admin/register')} className={styles.footerLink}>Register Now</button>
+                Don't have an admin account? <button onClick={() => navigate('/?register=admin')} className={styles.footerLink}>Register Now</button>
              </p>
              <p className={styles.footerSecurity}>
                 Secure SSL Encrypted Connection

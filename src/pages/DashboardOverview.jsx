@@ -40,7 +40,7 @@ const StatCard = ({ title, value, icon, trend, trendValue }) => (
 
 
 const DashboardOverview = () => {
-  useAuth(); // keep provider active
+  const { user } = useAuth();
   const [stats, setStats] = useState({
     total: 0,
     present: 0,
@@ -56,17 +56,25 @@ const DashboardOverview = () => {
     const fetchStats = async () => {
       try {
         // 1. Get total employees
-        const { count: total } = await supabase
+        let totalQuery = supabase
           .from('employees')
           .select('*', { count: 'exact', head: true });
+        if (user && user.id !== 'demo-user-id') {
+          totalQuery = totalQuery.eq('admin_id', user.id);
+        }
+        const { count: total } = await totalQuery;
 
         // 2. Get present today
         const today = new Date().toISOString().split('T')[0];
-        const { count: present } = await supabase
+        let presentQuery = supabase
           .from('attendance')
-          .select('*', { count: 'exact', head: true })
+          .select('*, employees!inner(admin_id)', { count: 'exact', head: true })
           .eq('date', today)
           .eq('status', 'Present');
+        if (user && user.id !== 'demo-user-id') {
+          presentQuery = presentQuery.eq('employees.admin_id', user.id);
+        }
+        const { count: present } = await presentQuery;
 
         const absent = (total || 0) - (present || 0);
         const avg = total > 0 ? ((present / total) * 100).toFixed(1) + '%' : '0%';
@@ -76,11 +84,15 @@ const DashboardOverview = () => {
         // 3. Fetch weekly attendance (last 7 days)
         const lastWeek = new Date();
         lastWeek.setDate(lastWeek.getDate() - 6);
-        const { data: attendanceData } = await supabase
+        let attendanceQuery = supabase
           .from('attendance')
-          .select(`*, employees(name, department)`)
+          .select(`*, employees!inner(name, department, admin_id)`)
           .gte('date', lastWeek.toISOString().split('T')[0])
           .order('login_time', { ascending: false });
+        if (user && user.id !== 'demo-user-id') {
+          attendanceQuery = attendanceQuery.eq('employees.admin_id', user.id);
+        }
+        const { data: attendanceData } = await attendanceQuery;
 
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const weekMap = {};
@@ -130,11 +142,11 @@ const DashboardOverview = () => {
     };
 
     fetchStats();
-  }, []);
+  }, [user]);
 
   return (
     <div className={styles.pageContainer}>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className={styles.statsGrid}>
         <StatCard 
           title="Total Employees" 
           value={loading ? '...' : stats.total} 
