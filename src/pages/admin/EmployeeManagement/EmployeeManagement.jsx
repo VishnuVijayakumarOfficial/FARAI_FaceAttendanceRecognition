@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase } from '../../../lib/supabase';
 import { 
   Search, 
   Trash2, 
@@ -14,8 +14,7 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-import { useAuth } from '../hooks/useAuth';
-import styles from './EmployeeManagement.module.css';
+import { useAuth } from '../../../hooks/useAuth';
 
 const EmployeeManagement = () => {
   const { user } = useAuth();
@@ -173,16 +172,16 @@ const EmployeeManagement = () => {
   );
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.headerWrapper}>
+    <div className="">
+      <div className="">
         <div>
-          <h2 className={styles.pageTitle}>Employee Directory</h2>
-          <p className={styles.pageSubtitle}>Manage and monitor your team member profiles</p>
+          <h2 className="">Employee Directory</h2>
+          <p className="">Manage and monitor your team member profiles</p>
         </div>
-        <div className={styles.headerActions}>
+        <div className="">
           <button 
             onClick={fetchEmployees}
-            className={styles.refreshBtn}
+            className=""
             title="Refresh to see latest face registrations"
           >
             <RefreshCw size={18} />
@@ -190,7 +189,7 @@ const EmployeeManagement = () => {
           </button>
           <button 
             onClick={() => setIsModalOpen(true)}
-            className={styles.addBtn}
+            className=""
           >
             <UserPlus size={20} />
             Add New Employee
@@ -198,91 +197,91 @@ const EmployeeManagement = () => {
         </div>
       </div>
 
-      <div className={styles.controlsWrapper}>
-        <div className={styles.searchGroup}>
-          <Search className={styles.searchIcon} size={20} />
+      <div className="">
+        <div className="">
+          <Search className="" size={20} />
           <input
             type="text"
             placeholder="Search by name, ID or department..."
-            className={styles.searchInput}
+            className=""
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        <button className={styles.filterBtn}>
+        <button className="">
           <Filter size={20} />
           <span>Filter List</span>
         </button>
       </div>
 
-      <div className={styles.tableContainer}>
-        <div className={styles.tableScroll}>
-          <table className={styles.table}>
-            <thead className={styles.thead}>
+      <div className="">
+        <div className="">
+          <table className="">
+            <thead className="">
               <tr>
-                <th className={styles.th}>Employee</th>
-                <th className={styles.th}>ID</th>
-                <th className={styles.th}>Department</th>
-                <th className={styles.th}>Time Slot</th>
-                <th className={styles.th}>Today's Status</th>
-                <th className={styles.th}>Face AI</th>
-                <th className={styles.thRight}>Actions</th>
+                <th className="">Employee</th>
+                <th className="">ID</th>
+                <th className="">Department</th>
+                <th className="">Time Slot</th>
+                <th className="">Today's Status</th>
+                <th className="">Face AI</th>
+                <th className="">Actions</th>
               </tr>
             </thead>
-            <tbody className={styles.tbody}>
+            <tbody className="">
               {loading && employees.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className={styles.tdEmpty}>
-                    <Loader2 className="animate-spin inline-block" style={{ color: '#10b981' }} size={32} />
+                  <td colSpan="7" className="">
+                    <div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div>
                   </td>
                 </tr>
               ) : filteredEmployees.map((emp) => (
-                <tr key={emp.id} className={styles.tr}>
-                  <td className={styles.td}>
-                    <div className={styles.empWrapper}>
+                <tr key={emp.id} className="">
+                  <td className="">
+                    <div className="">
                       {emp.face_image ? (
-                        <img src={emp.face_image} alt={emp.name} className={styles.avatarImg} />
+                        <img src={emp.face_image} alt={emp.name} className="" />
                       ) : (
-                        <div className={styles.avatarFallback}>
+                        <div className="">
                           {emp.name.trim().split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
                         </div>
                       )}
                       <div>
-                        <p className={styles.empName}>{emp.name}</p>
-                        <p className={styles.empEmail}>{emp.email}</p>
+                        <p className="">{emp.name}</p>
+                        <p className="">{emp.email}</p>
                       </div>
                     </div>
                   </td>
-                  <td className={styles.td}>
-                    <span className={styles.idText}>#{emp.employee_id}</span>
+                  <td className="">
+                    <span className="">#{emp.employee_id}</span>
                   </td>
-                  <td className={styles.td}>
+                  <td className="">
                     <div>
-                      <p className={styles.deptText}>{emp.department}</p>
-                      <p className={styles.desigText}>{emp.designation}</p>
+                      <p className="">{emp.department}</p>
+                      <p className="">{emp.designation}</p>
                     </div>
                   </td>
-                  <td className={styles.td}>
-                    <div className={styles.timeSlot}>
-                       <Calendar size={14} className={styles.timeIcon} />
+                  <td className="">
+                    <div className="">
+                       <Calendar size={14} className="" />
                        {emp.attendance_start_time} - {emp.attendance_end_time}
                     </div>
                   </td>
-                  <td className={styles.td}>
-                    <div className={emp.todayStatus === 'Present' ? styles.pillSuccess : styles.pillError}>
+                  <td className="">
+                    <div className={emp.todayStatus === 'Present' ? '' : ''}>
                       {emp.todayStatus === 'Present' ? 'Present Today' : 'Not Logged In'}
                     </div>
                   </td>
-                  <td className={styles.td}>
-                    <div className={emp.face_descriptor ? styles.pillSuccess : styles.pillError}>
+                  <td className="">
+                    <div className={emp.face_descriptor ? '' : ''}>
                       <CheckCircle2 size={12} />
                       {emp.face_descriptor ? 'Face Logged' : 'Not Registered'}
                     </div>
                   </td>
-                  <td className={styles.td}>
-                    <div className={styles.actionGroup}>
-                      <button onClick={() => handleEditEmployee(emp)} className={styles.actionEdit}><Edit2 size={18} /></button>
-                      <button onClick={() => handleDeleteEmployee(emp.id)} className={styles.actionDelete}><Trash2 size={18} /></button>
+                  <td className="">
+                    <div className="">
+                      <button onClick={() => handleEditEmployee(emp)} className=""><Edit2 size={18} /></button>
+                      <button onClick={() => handleDeleteEmployee(emp.id)} className=""><Trash2 size={18} /></button>
                     </div>
                   </td>
                 </tr>
@@ -293,39 +292,39 @@ const EmployeeManagement = () => {
       </div>
 
       {isModalOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <div className={styles.modalHeader}>
-              <h3 className={styles.modalTitle}>{editingId ? 'Edit Employee' : 'Register New Employee'}</h3>
+        <div className="">
+          <div className="">
+            <div className="">
+              <h3 className="">{editingId ? 'Edit Employee' : 'Register New Employee'}</h3>
               <button 
                 onClick={() => { 
                   setIsModalOpen(false); 
                   setEditingId(null); 
                   setFormData({ name: '', email: '', employee_id: '', department: '', designation: '', password: '', attendance_start_time: '09:00', attendance_end_time: '10:00' }); 
                 }} 
-                className={styles.closeBtn}
+                className=""
               >
                 <X size={24} />
               </button>
             </div>
-            <form onSubmit={handleAddEmployee} className={styles.formContainer}>
-              <div className={styles.formGrid}>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Full Name</label>
-                  <input required className={styles.formInput} value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="Full Name" />
+            <form onSubmit={handleAddEmployee} className="">
+              <div className="">
+                <div className="">
+                  <label className="">Full Name</label>
+                  <input required className="" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="Full Name" />
                 </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Employee ID</label>
-                  <input required className={styles.formInput} value={formData.employee_id} onChange={(e) => setFormData({...formData, employee_id: e.target.value})} placeholder="EMP-001" />
+                <div className="">
+                  <label className="">Employee ID</label>
+                  <input required className="" value={formData.employee_id} onChange={(e) => setFormData({...formData, employee_id: e.target.value})} placeholder="EMP-001" />
                 </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Work Email</label>
-                  <input required type="email" className={styles.formInput} value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="email@company.com" />
+                <div className="">
+                  <label className="">Work Email</label>
+                  <input required type="email" className="" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="email@company.com" />
                 </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Department</label>
+                <div className="">
+                  <label className="">Department</label>
                   <select 
-                    className={styles.formInput} 
+                    className="" 
                     style={{appearance: 'none', backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%2364748b\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'/%3E%3C/svg%3E")', backgroundPosition: 'right 1rem center', backgroundRepeat: 'no-repeat'}} 
                     value={formData.department} 
                     onChange={(e) => setFormData({...formData, department: e.target.value})}
@@ -337,23 +336,23 @@ const EmployeeManagement = () => {
                     <option value="Ops">Operations</option>
                   </select>
                 </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Temporary Password</label>
-                  <input required type="password" title="This password must be used to create the auth user manually" className={styles.formInput} value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} placeholder="••••••••" />
+                <div className="">
+                  <label className="">Temporary Password</label>
+                  <input required type="password" title="This password must be used to create the auth user manually" className="" value={formData.password} onChange={(e) => setFormData({...formData, password: e.target.value})} placeholder="••••••••" />
                 </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Attendance Start Time</label>
-                  <input type="time" className={styles.formInput} value={formData.attendance_start_time} onChange={(e) => setFormData({...formData, attendance_start_time: e.target.value})} />
+                <div className="">
+                  <label className="">Attendance Start Time</label>
+                  <input type="time" className="" value={formData.attendance_start_time} onChange={(e) => setFormData({...formData, attendance_start_time: e.target.value})} />
                 </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.label}>Attendance End Time</label>
-                  <input type="time" className={styles.formInput} value={formData.attendance_end_time} onChange={(e) => setFormData({...formData, attendance_end_time: e.target.value})} />
+                <div className="">
+                  <label className="">Attendance End Time</label>
+                  <input type="time" className="" value={formData.attendance_end_time} onChange={(e) => setFormData({...formData, attendance_end_time: e.target.value})} />
                 </div>
               </div>
-              <p className={styles.warningNote}>
+              <p className="">
                 * The employee can immediately log in to the portal using this email and password.
               </p>
-              <div className={styles.formActions}>
+              <div className="">
                 <button 
                   type="button" 
                   onClick={() => { 
@@ -361,11 +360,11 @@ const EmployeeManagement = () => {
                     setEditingId(null); 
                     setFormData({ name: '', email: '', employee_id: '', department: '', designation: '', password: '', attendance_start_time: '09:00', attendance_end_time: '10:00' }); 
                   }} 
-                  className={styles.cancelBtn}
+                  className=""
                 >
                   Cancel
                 </button>
-                <button type="submit" disabled={loading} className={styles.submitBtn}>
+                <button type="submit" disabled={loading} className="">
                   {editingId ? 'Update Account' : 'Create Account'}
                 </button>
               </div>
@@ -378,3 +377,8 @@ const EmployeeManagement = () => {
 };
 
 export default EmployeeManagement;
+
+
+
+
+

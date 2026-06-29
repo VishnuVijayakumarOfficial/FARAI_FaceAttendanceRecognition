@@ -1,24 +1,25 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthProvider';
-import { ThemeProvider } from './context/ThemeProvider';
 import { useAuth } from './hooks/useAuth';
 import { Toaster } from 'react-hot-toast';
 
 // Pages
-import Home from './pages/Home';
-import AdminLogin from './pages/AdminLogin';
-import AdminDashboard from './pages/AdminDashboard';
-import EmployeeLogin from './pages/EmployeeLogin';
-import EmployeeAttendance from './pages/EmployeeAttendance';
-import EmployeeDashboard from './pages/EmployeeDashboard';
-import EmployeeReports from './pages/EmployeeReports';
+import Home from './pages/Home/Home';
+import AdminLogin from './pages/admin/AdminLogin/AdminLogin';
+import AdminDashboard from './pages/admin/AdminDashboard/AdminDashboard';
+import EmployeeLogin from './pages/employee/EmployeeLogin/EmployeeLogin';
+import EmployeeAttendance from './pages/employee/EmployeeAttendance/EmployeeAttendance';
+import EmployeeDashboard from './pages/employee/EmployeeDashboard/EmployeeDashboard';
+import EmployeeReports from './pages/employee/EmployeeReports/EmployeeReports';
 
 const ProtectedRoute = ({ children, allowedRole }) => {
   const { user, role, loading } = useAuth();
 
   if (loading) return (
-    <div className="app-loading-container">
-      <div className="app-loading-spinner"></div>
+    <div className="min-vh-100 d-flex align-items-center justify-content-center bg-light">
+      <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
+        <span className="visually-hidden">Loading...</span>
+      </div>
     </div>
   );
 
@@ -30,10 +31,9 @@ const ProtectedRoute = ({ children, allowedRole }) => {
 
 function App() {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <Router basename={import.meta.env.BASE_URL}>
-          <div className="app-container">
+    <AuthProvider>
+      <Router basename={import.meta.env.BASE_URL}>
+          <div className="container-fluid p-0 m-0">
             <Toaster position="top-right" />
             <Routes>
               <Route path="/" element={<Home />} />
@@ -81,8 +81,8 @@ function App() {
           </div>
         </Router>
       </AuthProvider>
-    </ThemeProvider>
   );
 }
 
 export default App;
+

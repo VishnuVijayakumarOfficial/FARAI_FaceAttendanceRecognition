@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import { loadModels, getFaceDescriptor, compareFaces } from '../utils/faceApi';
+import { supabase } from '../../../lib/supabase';
+import { loadModels, getFaceDescriptor, compareFaces } from '../../../utils/faceApi';
 import {
   Camera,
   CheckCircle,
@@ -17,9 +17,7 @@ import {
   Sun,
   Moon
 } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth';
-import { useTheme } from '../hooks/useTheme';
-import styles from './EmployeeAttendance.module.css';
+import { useAuth } from '../../../hooks/useAuth';
 
 const EmployeeAttendance = () => {
   const { user, signOut } = useAuth();
@@ -27,8 +25,7 @@ const EmployeeAttendance = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const mode = searchParams.get('mode') || 'auto';
-  const { isDarkMode, toggleTheme } = useTheme();
-  const [modelsLoaded, setModelsLoaded] = useState(false);
+    const [modelsLoaded, setModelsLoaded] = useState(false);
   const [modelsError, setModelsError] = useState(false);
   const [employeeInfo, setEmployeeInfo] = useState(null);
   const [loadingData, setLoadingData] = useState(true);
@@ -212,10 +209,10 @@ const EmployeeAttendance = () => {
 
   if (loadingData) {
     return (
-      <div className={styles.loadingContainer}>
+      <div className="">
         <div style={{ textAlign: 'center' }}>
-          <Loader2 className={styles.loadingSpinner} size={48} />
-          <p className={styles.loadingText}>Loading your profile...</p>
+          <Loader2 className="" size={48} />
+          <p className="">Loading your profile...</p>
         </div>
       </div>
     );
@@ -229,60 +226,58 @@ const EmployeeAttendance = () => {
   const hideAttendanceStep = mode === 'register';
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.contentWrapper}>
+    <div className="">
+      <div className="">
 
         {/* Top Navbar */}
-        <nav className={styles.navbar}>
-          <div className={styles.brandWrapper}>
-            <div className={styles.brandIcon}>
+        <nav className="">
+          <div className="">
+            <div className="">
               <ScanFace size={24} />
             </div>
             <div>
-              <h1 className={styles.brandTitle}>FAR<span className={styles.brandHighlight}>AI</span></h1>
-              <p className={styles.brandSubtitle}>Employee Portal</p>
+              <h1 className="">FAR<span className="">AI</span></h1>
+              <p className="">Employee Portal</p>
             </div>
           </div>
           
-          <button onClick={toggleTheme} className={styles.themeBtn}>
-            {isDarkMode ? <Sun size={20} color="#f59e0b" /> : <Moon size={20} />}
-          </button>
+          
         </nav>
 
         {/* Back Button */}
-        <button onClick={() => navigate('/employee/dashboard')} className={styles.backBtn}>
+        <button onClick={() => navigate('/employee/dashboard')} className="">
           <ArrowLeft size={18} /> Back to Dashboard
         </button>
 
         {/* Employee Profile Header */}
-        <div className={styles.profileCard}>
-          <div className={styles.profileFlex}>
-            <div className={styles.avatarContainer}>
+        <div className="">
+          <div className="">
+            <div className="">
               {employeeInfo?.face_image ? (
-                <div className={styles.avatarImage}>
+                <div className="">
                   <img src={employeeInfo.face_image} alt={employeeInfo.name} />
                 </div>
               ) : (
-                <div className={styles.avatarFallback}>
-                  <span className={styles.avatarFallbackText}>{initials}</span>
+                <div className="">
+                  <span className="">{initials}</span>
                 </div>
               )}
             </div>
 
-            <div className={styles.profileInfo}>
-              <p className={styles.profileLabel}>Employee Identity Center</p>
-              <h1 className={styles.profileName}>{employeeInfo?.name}</h1>
-              <p className={styles.profileDetails}>
+            <div className="">
+              <p className="">Employee Identity Center</p>
+              <h1 className="">{employeeInfo?.name}</h1>
+              <p className="">
                 {employeeInfo?.designation} &bull; {employeeInfo?.department} &bull; #{employeeInfo?.employee_id}
               </p>
 
-              <div className={styles.statusPills}>
-                <span className={`${styles.pill} ${faceRegistered ? styles.pillSuccess : styles.pillWarning}`}>
+              <div className="">
+                <span className=" ${faceRegistered ? '' : ''}">
                   <ScanFace size={12} />
                   {faceRegistered ? 'Face Registered' : 'Face Not Registered'}
                 </span>
                 {mode !== 'register' && (
-                  <span className={`${styles.pill} ${alreadyMarked ? styles.pillSuccess : withinWindow ? styles.pillPrimary : styles.pillError}`}>
+                  <span className=" ${alreadyMarked ? '' : withinWindow ? '' : ''}">
                     <Clock size={12} />
                     {alreadyMarked ? 'Present Today' : withinWindow ? 'Window Open' : 'Window Closed'}
                   </span>
@@ -291,38 +286,38 @@ const EmployeeAttendance = () => {
             </div>
 
             {mode !== 'register' && (
-              <div className={`${styles.timeWindow} ${withinWindow ? styles.timeWindowOpen : ''}`}>
-                <p className={styles.timeLabel}>Shift Window</p>
-                <p className={styles.timeValue}>{employeeInfo?.attendance_start_time}</p>
-                <p className={styles.timeTo}>to</p>
-                <p className={styles.timeValue}>{employeeInfo?.attendance_end_time}</p>
+              <div className=" ${withinWindow ? '' : ''}">
+                <p className="">Shift Window</p>
+                <p className="">{employeeInfo?.attendance_start_time}</p>
+                <p className="">to</p>
+                <p className="">{employeeInfo?.attendance_end_time}</p>
               </div>
             )}
           </div>
         </div>
 
         {modelsError && (
-          <div className={styles.errorBanner}>
+          <div className="">
             <AlertCircle size={20} />
-            <p className={styles.errorText}>AI models failed to load. Please refresh the page.</p>
+            <p className="">AI models failed to load. Please refresh the page.</p>
           </div>
         )}
 
         {/* Step Flow Indicator */}
         {!hideRegistrationStep && !hideAttendanceStep && (
-          <div className={styles.stepsContainer}>
-            <div className={`${styles.stepBox} ${faceRegistered ? styles.stepActive : styles.stepPending}`}>
+          <div className="">
+            <div className=" ${faceRegistered ? '' : ''}">
               <ScanFace size={18} />
               Step 1: Register Face
               {faceRegistered && <CheckCircle size={16} />}
             </div>
-            <div className={`${styles.stepLine} ${faceRegistered ? styles.stepLineActive : styles.stepLinePending}`} />
-            <div className={`${styles.stepBox} ${
+            <div className=" ${faceRegistered ? '' : ''}" />
+            <div className={`${''} ${
               attendSuccess || alreadyMarked
-                ? styles.stepActive
+                ? ''
                 : faceRegistered && withinWindow
-                  ? styles.stepPending
-                  : styles.stepDisabled
+                  ? ''
+                  : ''
             }`}>
               {faceRegistered ? <Unlock size={18} /> : <Lock size={18} />}
               Step 2: Mark Attendance
@@ -331,59 +326,59 @@ const EmployeeAttendance = () => {
           </div>
         )}
 
-        <div className={styles.mainGrid}>
+        <div className="">
           {/* LEFT: Camera Feed */}
           <div>
-            <div className={styles.cameraCard}>
-              <div className={styles.cameraHeader}>
-                <div className={styles.cameraHeaderLeft}>
-                  <div className={styles.cameraIconBox}>
+            <div className="">
+              <div className="">
+                <div className="">
+                  <div className="">
                     <Camera size={20} />
                   </div>
                   <div>
-                    <p className={styles.cameraTitle}>Live Camera</p>
-                    <p className={styles.cameraSub}>Keep your face in the circle</p>
+                    <p className="">Live Camera</p>
+                    <p className="">Keep your face in the circle</p>
                   </div>
                 </div>
-                <div className={styles.liveIndicator}>
-                  <div className={styles.liveDot}></div>
-                  <span className={styles.liveText}>LIVE</span>
+                <div className="">
+                  <div className=""></div>
+                  <span className="">LIVE</span>
                 </div>
               </div>
 
-              <div className={styles.videoContainer}>
-                <video ref={videoRef} autoPlay muted playsInline className={styles.videoElement} />
-                <div className={styles.guideOverlay}>
-                  <div className={styles.guideCircle}></div>
+              <div className="">
+                <video ref={videoRef} autoPlay muted playsInline className="" />
+                <div className="">
+                  <div className=""></div>
                 </div>
 
                 {!modelsLoaded && (
-                  <div className={styles.overlayPanel}>
-                    <div className={styles.overlayFallbackBox}>
-                      <span className={styles.overlayFallbackText}>{initials}</span>
+                  <div className="">
+                    <div className="">
+                      <span className="">{initials}</span>
                     </div>
-                    <div className={styles.overlayStatusRow}>
-                      <Loader2 size={14} className="animate-spin" />
-                      <span className={styles.overlayStatusText}>Loading AI...</span>
+                    <div className="">
+                      <div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div>
+                      <span className="">Loading AI...</span>
                     </div>
                   </div>
                 )}
 
                 {registerSuccess && (
-                  <div className={styles.successOverlay}>
-                    <div className={styles.successIconBox}>
+                  <div className="">
+                    <div className="">
                       <CheckCircle size={50} />
                     </div>
-                    <p className={styles.successText}>Face Registered!</p>
+                    <p className="">Face Registered!</p>
                   </div>
                 )}
 
                 {attendSuccess && (
-                  <div className={styles.successOverlay}>
-                    <div className={styles.successIconBox}>
+                  <div className="">
+                    <div className="">
                       <UserCheck size={50} />
                     </div>
-                    <p className={styles.successText}>Attendance Marked!</p>
+                    <p className="">Attendance Marked!</p>
                   </div>
                 )}
               </div>
@@ -391,68 +386,68 @@ const EmployeeAttendance = () => {
           </div>
 
           {/* RIGHT: Action Panels */}
-          <div className={styles.actionColumn}>
+          <div className="">
 
             {/* STEP 1 */}
             {!hideRegistrationStep && (
-              <div className={styles.actionCard}>
-                <div className={styles.actionHeader}>
+              <div className="">
+                <div className="">
                   {mode !== 'register' && (
-                    <div className={`${styles.actionNumber} ${faceRegistered ? styles.actionNumberActive : styles.actionNumberActive}`}>
+                    <div className=" ${faceRegistered ? '' : ''}">
                       1
                     </div>
                   )}
                   <div>
-                    <h2 className={styles.actionTitle}>Register Your Face</h2>
-                    <p className={styles.actionSub}>One-time setup to enable attendance</p>
+                    <h2 className="">Register Your Face</h2>
+                    <p className="">One-time setup to enable attendance</p>
                   </div>
                 </div>
 
-                <div className={styles.previewBox}>
+                <div className="">
                   {employeeInfo?.face_image ? (
-                    <div className={styles.previewImgBox}>
+                    <div className="">
                       <img src={employeeInfo.face_image} alt="Registered" />
                     </div>
                   ) : (
-                    <div className={styles.previewFallbackBox}>
-                      <span className={styles.previewFallbackText}>{initials}</span>
+                    <div className="">
+                      <span className="">{initials}</span>
                     </div>
                   )}
                   <div>
-                    <p className={styles.previewName}>{employeeInfo?.name}</p>
-                    <p className={faceRegistered ? styles.previewStatusGood : styles.previewStatusBad}>
+                    <p className="">{employeeInfo?.name}</p>
+                    <p className={faceRegistered ? '' : ''}>
                       {faceRegistered ? '✓ Face registered — can re-register anytime' : '⚠ No face data saved yet'}
                     </p>
                   </div>
                 </div>
 
                 {registerError && (
-                  <div className={styles.alertError}>
+                  <div className="">
                     <AlertCircle size={16} />
-                    <p className={styles.alertErrorText}>{registerError}</p>
+                    <p className="">{registerError}</p>
                   </div>
                 )}
 
                 {registerSuccess && (
-                  <div className={styles.alertSuccess}>
+                  <div className="">
                     <CheckCircle size={16} />
-                    <p className={styles.alertSuccessText}>Face registered! Step 2 is now unlocked.</p>
+                    <p className="">Face registered! Step 2 is now unlocked.</p>
                   </div>
                 )}
 
                 <button
                   onClick={handleRegisterFace}
                   disabled={!modelsLoaded || registering || registerSuccess}
-                  className={`${styles.btnAction} ${
+                  className={`${''} ${
                     !modelsLoaded || registering || registerSuccess
-                      ? styles.btnActionDisabled
+                      ? ''
                       : faceRegistered
-                        ? styles.btnActionSecondary
-                        : styles.btnActionPrimary
+                        ? ''
+                        : ''
                   }`}
                 >
                   {registering ? (
-                    <><Loader2 size={20} className="animate-spin" /> Scanning Face...</>
+                    <><div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div> Scanning Face...</>
                   ) : registerSuccess ? (
                     <><CheckCircle size={20} /> Registered Successfully!</>
                   ) : faceRegistered ? (
@@ -466,18 +461,18 @@ const EmployeeAttendance = () => {
 
             {/* STEP 2 */}
             {!hideAttendanceStep && (
-              <div className={`${styles.actionCard} ${!faceRegistered ? styles.actionCardDisabled : ''}`}>
-                <div className={styles.actionHeader}>
+              <div className=" ${!faceRegistered ? '' : ''}">
+                <div className="">
                   {mode !== 'attendance' && (
-                    <div className={`${styles.actionNumber} ${
-                      attendSuccess || alreadyMarked || faceRegistered ? styles.actionNumberActive : styles.actionNumberDisabled
+                    <div className={`${''} ${
+                      attendSuccess || alreadyMarked || faceRegistered ? '' : ''
                     }`}>
                       2
                     </div>
                   )}
                   <div>
-                    <h2 className={styles.actionTitle}>Mark Attendance</h2>
-                    <p className={styles.actionSub}>
+                    <h2 className="">Mark Attendance</h2>
+                    <p className="">
                       {!faceRegistered
                         ? 'Complete Step 1 first'
                         : alreadyMarked
@@ -488,47 +483,47 @@ const EmployeeAttendance = () => {
                     </p>
                   </div>
                   {faceRegistered ? (
-                    <Unlock size={16} className={styles.unlockIcon} />
+                    <Unlock size={16} className="" />
                   ) : (
-                    <Lock size={16} className={styles.lockIcon} />
+                    <Lock size={16} className="" />
                   )}
                 </div>
 
                 {alreadyMarked && !attendSuccess && (
-                  <div className={styles.alertSuccess}>
+                  <div className="">
                     <CheckCircle size={20} />
                     <div>
-                      <p className={styles.alertSuccessText}>Attendance already marked for today!</p>
-                      <p className={styles.alertSuccessSub}>See you tomorrow 👋</p>
+                      <p className="">Attendance already marked for today!</p>
+                      <p className="">See you tomorrow 👋</p>
                     </div>
                   </div>
                 )}
 
                 {attendError && (
-                  <div className={styles.alertError}>
+                  <div className="">
                     <AlertCircle size={16} />
-                    <p className={styles.alertErrorText}>{attendError}</p>
+                    <p className="">{attendError}</p>
                   </div>
                 )}
 
                 {attendSuccess && (
-                  <div className={styles.alertSuccess}>
+                  <div className="">
                     <CheckCircle size={16} />
-                    <p className={styles.alertSuccessText}>Attendance marked! Redirecting...</p>
+                    <p className="">Attendance marked! Redirecting...</p>
                   </div>
                 )}
 
                 <button
                   onClick={handleMarkAttendance}
                   disabled={!faceRegistered || !modelsLoaded || verifying || attendSuccess || alreadyMarked || !withinWindow}
-                  className={`${styles.btnAction} ${
+                  className={`${''} ${
                     faceRegistered && modelsLoaded && !verifying && !attendSuccess && !alreadyMarked && withinWindow
-                      ? styles.btnActionPrimary
-                      : styles.btnActionDisabled
+                      ? ''
+                      : ''
                   }`}
                 >
                   {verifying ? (
-                    <><Loader2 size={20} className="animate-spin" /> Verifying Face...</>
+                    <><div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div> Verifying Face...</>
                   ) : attendSuccess || alreadyMarked ? (
                     <><CheckCircle size={20} /> Attendance Marked</>
                   ) : !faceRegistered ? (
@@ -550,3 +545,8 @@ const EmployeeAttendance = () => {
 };
 
 export default EmployeeAttendance;
+
+
+
+
+

@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import { useAuth } from '../hooks/useAuth';
-import { useTheme } from '../hooks/useTheme';
+import { supabase } from '../../../lib/supabase';
+import { useAuth } from '../../../hooks/useAuth';
 import {
   Calendar,
   FileSpreadsheet,
@@ -15,13 +14,11 @@ import {
   Sun,
   Moon
 } from 'lucide-react';
-import styles from './EmployeeReports.module.css';
 
 const EmployeeReports = () => {
   const { user, signOut } = useAuth();
   const navigate = useNavigate();
-  const { isDarkMode, toggleTheme } = useTheme();
-  
+    
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [startDate, setStartDate] = useState('');
@@ -103,41 +100,39 @@ const EmployeeReports = () => {
   };
 
   return (
-    <div className={styles.pageContainer}>
-      <div className={styles.contentWrapper}>
+    <div className="">
+      <div className="">
         
         {/* Top Navbar */}
-        <nav className={styles.navbar}>
-          <div className={styles.brandWrapper}>
-            <div className={styles.brandIcon}>
+        <nav className="">
+          <div className="">
+            <div className="">
               <ScanFace size={24} />
             </div>
             <div>
-              <h1 className={styles.brandTitle}>FAR<span className={styles.brandHighlight}>AI</span></h1>
-              <p className={styles.brandSubtitle}>Employee Portal</p>
+              <h1 className="">FAR<span className="">AI</span></h1>
+              <p className="">Employee Portal</p>
             </div>
           </div>
           
-          <button onClick={toggleTheme} className={styles.themeBtn}>
-            {isDarkMode ? <Sun size={20} color="#f59e0b" /> : <Moon size={20} />}
-          </button>
+          
         </nav>
 
         {/* Back Button */}
-        <button onClick={() => navigate('/employee/dashboard')} className={styles.backBtn}>
+        <button onClick={() => navigate('/employee/dashboard')} className="">
           <ArrowLeft size={18} /> Back to Dashboard
         </button>
 
         {/* Header */}
-        <div className={styles.headerWrapper}>
+        <div className="">
           <div>
-            <h2 className={styles.pageTitle}>My Attendance Records</h2>
-            <p className={styles.pageSubtitle}>View, filter, and download your personal attendance history</p>
+            <h2 className="">My Attendance Records</h2>
+            <p className="">View, filter, and download your personal attendance history</p>
           </div>
           <button
             onClick={exportCSV}
             disabled={filteredRecords.length === 0}
-            className={`${styles.exportBtn} ${filteredRecords.length === 0 ? styles.exportBtnDisabled : ''}`}
+            className=" ${filteredRecords.length === 0 ? '' : ''}"
           >
             <FileSpreadsheet size={20} />
             Export CSV
@@ -145,64 +140,64 @@ const EmployeeReports = () => {
         </div>
 
         {/* Stats Cards */}
-        <div className={styles.statsGrid}>
-          <div className={styles.statCard}>
-            <div className={styles.iconPresent}>
+        <div className="">
+          <div className="">
+            <div className="">
               <UserCheck size={28} />
             </div>
             <div>
-              <p className={styles.statLabel}>Present Days</p>
-              <p className={styles.statValue}>{loading ? '...' : presentCount}</p>
+              <p className="">Present Days</p>
+              <p className="">{loading ? '...' : presentCount}</p>
             </div>
           </div>
-          <div className={styles.statCard}>
-            <div className={styles.iconAbsent}>
+          <div className="">
+            <div className="">
               <UserX size={28} />
             </div>
             <div>
-              <p className={styles.statLabel}>Absent Days</p>
-              <p className={styles.statValue}>{loading ? '...' : absentCount}</p>
+              <p className="">Absent Days</p>
+              <p className="">{loading ? '...' : absentCount}</p>
             </div>
           </div>
-          <div className={styles.statCard}>
-            <div className={styles.iconRate}>
+          <div className="">
+            <div className="">
               <ScanFace size={28} />
             </div>
             <div>
-              <p className={styles.statLabel}>Attendance Rate</p>
-              <p className={styles.statValue}>{loading ? '...' : `${attendanceRate}%`}</p>
+              <p className="">Attendance Rate</p>
+              <p className="">{loading ? '...' : `${attendanceRate}%`}</p>
             </div>
           </div>
         </div>
 
         {/* Filters */}
-        <div className={styles.filtersWrapper}>
-          <div className={styles.filterGroup}>
-            <Calendar className={styles.filterIcon} size={18} />
+        <div className="">
+          <div className="">
+            <Calendar className="" size={18} />
             <input
               type="date"
-              className={styles.inputField}
+              className=""
               placeholder="Start Date"
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
             />
           </div>
-          <div className={styles.filterGroup}>
-            <Calendar className={styles.filterIcon} size={18} />
+          <div className="">
+            <Calendar className="" size={18} />
             <input
               type="date"
-              className={styles.inputField}
+              className=""
               placeholder="End Date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
             />
           </div>
-          <div className={styles.statusButtonGroup}>
+          <div className="">
             {['All', 'Present', 'Absent'].map(s => (
               <button
                 key={s}
                 onClick={() => setStatusFilter(s)}
-                className={`${styles.statusBtn} ${statusFilter === s ? styles.statusBtnActive : ''}`}
+                className=" ${statusFilter === s ? '' : ''}"
               >
                 {s}
               </button>
@@ -211,55 +206,55 @@ const EmployeeReports = () => {
         </div>
 
         {/* Table */}
-        <div className={styles.tableContainer}>
-          <div className={styles.tableScroll}>
-            <table className={styles.table}>
-              <thead className={styles.thead}>
+        <div className="">
+          <div className="">
+            <table className="">
+              <thead className="">
                 <tr>
-                  <th className={styles.th}>Date</th>
-                  <th className={styles.th}>Login Time</th>
-                  <th className={styles.th}>Verification Method</th>
-                  <th className={styles.th}>Status</th>
+                  <th className="">Date</th>
+                  <th className="">Login Time</th>
+                  <th className="">Verification Method</th>
+                  <th className="">Status</th>
                 </tr>
               </thead>
-              <tbody className={styles.tbody}>
+              <tbody className="">
                 {loading ? (
                   <tr>
-                    <td colSpan="4" className={styles.tdEmpty}>
-                      <Loader2 className="animate-spin inline-block text-primary-500" size={32} />
+                    <td colSpan="4" className="">
+                      <div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div>
                     </td>
                   </tr>
                 ) : filteredRecords.length === 0 ? (
                   <tr>
-                    <td colSpan="4" className={styles.tdEmpty}>
+                    <td colSpan="4" className="">
                       No records found matching filters.
                     </td>
                   </tr>
                 ) : filteredRecords.map((rec) => (
-                  <tr key={rec.id} className={styles.tr}>
-                    <td className={styles.td}>
-                      <span className={styles.dateText}>
+                  <tr key={rec.id} className="">
+                    <td className="">
+                      <span className="">
                         {new Date(rec.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', weekday: 'short' })}
                       </span>
                     </td>
-                    <td className={styles.td}>
+                    <td className="">
                       {rec.login_time ? (
-                        <div className={styles.loginTimeWrapper}>
-                          <Clock size={14} className={styles.iconClock} />
+                        <div className="">
+                          <Clock size={14} className="" />
                           {new Date(rec.login_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                         </div>
                       ) : (
-                        <span className={styles.timeEmpty}>—</span>
+                        <span className="">—</span>
                       )}
                     </td>
-                    <td className={styles.td}>
-                      <div className={styles.pillReg}>
+                    <td className="">
+                      <div className="">
                         <ScanFace size={11} />
                         Face ID
                       </div>
                     </td>
-                    <td className={styles.td}>
-                      <span className={rec.status === 'Present' ? styles.pillPresent : styles.pillAbsent}>
+                    <td className="">
+                      <span className={rec.status === 'Present' ? '' : ''}>
                         {rec.status === 'Present' ? <UserCheck size={11} /> : <UserX size={11} />}
                         {rec.status}
                       </span>
@@ -270,8 +265,8 @@ const EmployeeReports = () => {
             </table>
           </div>
           {!loading && (
-            <div className={styles.tableFooter}>
-              <p className={styles.footerText}>
+            <div className="">
+              <p className="">
                 Showing {filteredRecords.length} records
               </p>
             </div>
@@ -284,3 +279,8 @@ const EmployeeReports = () => {
 };
 
 export default EmployeeReports;
+
+
+
+
+

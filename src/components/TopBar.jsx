@@ -1,42 +1,41 @@
 import { useAuth } from '../hooks/useAuth';
-import { useTheme } from '../hooks/useTheme';
 import { Bell, Search, User, Sun, Moon } from 'lucide-react';
-import styles from './TopBar.module.css';
 
 const TopBar = ({ title }) => {
   const { user } = useAuth();
-  const { isDarkMode, toggleTheme } = useTheme();
-
+  
   return (
-    <div className={styles.topbar}>
-      <h1 className={styles.title}>{title || 'Dashboard'}</h1>
+    <div className={`navbar navbar-expand-lg px-4 py-3 border-bottom shadow-sm navbar-light bg-white`}>
+      <h4 className="mb-0 fw-bold me-auto">{title || 'Dashboard'}</h4>
 
-      <div className={styles.actions}>
-        <div className={styles.searchWrapper}>
-          <Search className={styles.searchIcon} size={18} />
+      <div className="d-flex align-items-center">
+        <div className="input-group d-none d-md-flex me-3" style={{ width: '250px' }}>
+          <span className={`input-group-text border-end-0 bg-transparent `}>
+            <Search size={18} className="text-secondary" />
+          </span>
           <input
             type="text"
             placeholder="Search anything..."
-            className={styles.searchInput}
+            className={`form-control border-start-0 ps-0 bg-transparent`}
           />
         </div>
 
-        <button onClick={toggleTheme} className={styles.iconBtn}>
-          {isDarkMode ? <Sun size={20} className={styles.iconColor} /> : <Moon size={20} className={styles.iconColor} />}
+
+
+        <button className="btn btn-link text-secondary p-2 me-3 position-relative">
+          <Bell size={20} />
+          <span className="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+            <span className="visually-hidden">New alerts</span>
+          </span>
         </button>
 
-        <button className={styles.iconBtn}>
-          <Bell size={20} className={styles.iconColor} />
-          <span className={styles.badge}></span>
-        </button>
-
-        <div className={styles.profileSection}>
-          <div className={styles.profileText}>
-            <p className={styles.profileName}>{user?.email?.split('@')[0] || 'Admin'}</p>
-            <p className={styles.profileRole}>Super Admin</p>
+        <div className="d-flex align-items-center ms-2 ps-3 border-start">
+          <div className="d-none d-md-block text-end me-3">
+            <p className="mb-0 fw-bold lh-1">{user?.email?.split('@')[0] || 'Admin'}</p>
+            <small className="text-secondary">Super Admin</small>
           </div>
-          <div className={styles.profileIcon}>
-            <User size={20} className={styles.iconColor} />
+          <div className="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
+            <User size={20} />
           </div>
         </div>
       </div>
@@ -45,3 +44,4 @@ const TopBar = ({ title }) => {
 };
 
 export default TopBar;
+
