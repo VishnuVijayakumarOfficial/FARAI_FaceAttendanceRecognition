@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Lock, Mail, ArrowLeft, Loader2, Users } from 'lucide-react';
+
 import { useAuth } from '../../../hooks/useAuth';
 
 const EmployeeLogin = () => {
@@ -37,7 +37,7 @@ const EmployeeLogin = () => {
           onClick={() => navigate('/')}
           className="btn btn-link text-decoration-none text-secondary d-flex align-items-center mb-4 p-0"
         >
-          <ArrowLeft size={20} className="me-2" />
+          <i className="bi bi-arrow-left me-2" style={{fontSize: '20px'}} ></i>
           Back to Selection
         </button>
 
@@ -45,7 +45,7 @@ const EmployeeLogin = () => {
           <div className="card-body p-5">
             <div className="text-center mb-4">
               <div className="d-inline-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary rounded-circle p-3 mb-3">
-                <Users size={32} />
+                <i className="bi bi-people" style={{fontSize: '32px'}} ></i>
               </div>
               <h3 className="fw-bold mb-2">Employee Login</h3>
               <p className="text-secondary">Access your personal dashboard</p>
@@ -55,7 +55,7 @@ const EmployeeLogin = () => {
               <div className="mb-3">
                 <label className="form-label text-secondary small fw-bold">Work Email</label>
                 <div className="position-relative">
-                  <Mail className="position-absolute top-50 translate-middle-y ms-3 text-secondary" size={20} />
+                  <i className="bi bi-envelope position-absolute top-50 translate-middle-y ms-3 text-secondary" style={{fontSize: '20px'}} ></i>
                   <input
                     type="email"
                     required
@@ -70,7 +70,7 @@ const EmployeeLogin = () => {
               <div className="mb-4">
                 <label className="form-label text-secondary small fw-bold">Password</label>
                 <div className="position-relative">
-                  <Lock className="position-absolute top-50 translate-middle-y ms-3 text-secondary" size={20} />
+                  <i className="bi bi-lock position-absolute top-50 translate-middle-y ms-3 text-secondary" style={{fontSize: '20px'}} ></i>
                   <input
                     type="password"
                     required

@@ -1,17 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabase';
-import { 
-  Search, 
-  Trash2, 
-  Edit2, 
-  Filter,
-  UserPlus,
-  Loader2,
-  X,
-  Calendar,
-  CheckCircle2,
-  RefreshCw
-} from 'lucide-react';
+
 import toast from 'react-hot-toast';
 
 import { useAuth } from '../../../hooks/useAuth';
@@ -184,14 +173,14 @@ const EmployeeManagement = () => {
             className=""
             title="Refresh to see latest face registrations"
           >
-            <RefreshCw size={18} />
+            <i className="bi bi-refreshcw" style={{fontSize: '18px'}} ></i>
             Refresh
           </button>
           <button 
             onClick={() => setIsModalOpen(true)}
             className=""
           >
-            <UserPlus size={20} />
+            <i className="bi bi-userplus" style={{fontSize: '20px'}} ></i>
             Add New Employee
           </button>
         </div>
@@ -199,7 +188,7 @@ const EmployeeManagement = () => {
 
       <div className="">
         <div className="">
-          <Search className="" size={20} />
+          <i className="bi bi-search" style={{fontSize: '20px'}} ></i>
           <input
             type="text"
             placeholder="Search by name, ID or department..."
@@ -209,7 +198,7 @@ const EmployeeManagement = () => {
           />
         </div>
         <button className="">
-          <Filter size={20} />
+          <i className="bi bi-funnel" style={{fontSize: '20px'}} ></i>
           <span>Filter List</span>
         </button>
       </div>
@@ -263,7 +252,7 @@ const EmployeeManagement = () => {
                   </td>
                   <td className="">
                     <div className="">
-                       <Calendar size={14} className="" />
+                       <i className="bi bi-calendar" style={{fontSize: '14px'}} ></i>
                        {emp.attendance_start_time} - {emp.attendance_end_time}
                     </div>
                   </td>
@@ -274,14 +263,14 @@ const EmployeeManagement = () => {
                   </td>
                   <td className="">
                     <div className={emp.face_descriptor ? '' : ''}>
-                      <CheckCircle2 size={12} />
+                      <i className="bi bi-checkcircle2" style={{fontSize: '12px'}} ></i>
                       {emp.face_descriptor ? 'Face Logged' : 'Not Registered'}
                     </div>
                   </td>
                   <td className="">
                     <div className="">
-                      <button onClick={() => handleEditEmployee(emp)} className=""><Edit2 size={18} /></button>
-                      <button onClick={() => handleDeleteEmployee(emp.id)} className=""><Trash2 size={18} /></button>
+                      <button onClick={() => handleEditEmployee(emp)} className=""><i className="bi bi-edit2" style={{fontSize: '18px'}} ></i></button>
+                      <button onClick={() => handleDeleteEmployee(emp.id)} className=""><i className="bi bi-trash" style={{fontSize: '18px'}} ></i></button>
                     </div>
                   </td>
                 </tr>
@@ -304,7 +293,7 @@ const EmployeeManagement = () => {
                 }} 
                 className=""
               >
-                <X size={24} />
+                <i className="bi bi-x" style={{fontSize: '24px'}} ></i>
               </button>
             </div>
             <form onSubmit={handleAddEmployee} className="">

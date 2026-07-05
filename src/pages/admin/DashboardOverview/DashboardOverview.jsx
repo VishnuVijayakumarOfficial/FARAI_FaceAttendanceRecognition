@@ -1,14 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabase';
 import { useAuth } from '../../../hooks/useAuth';
-import { 
-  Users, 
-  UserCheck, 
-  UserX, 
-  TrendingUp, 
-  ArrowUpRight, 
-  ArrowDownRight 
-} from 'lucide-react';
+
 import { 
   AreaChart, 
   Area, 
@@ -29,7 +22,7 @@ const StatCard = ({ title, value, icon, trend, trendValue }) => (
           {icon}
         </div>
         <div className={`badge ${trend === 'up' ? 'bg-success' : 'bg-danger'} bg-opacity-25 text-${trend === 'up' ? 'success' : 'danger'} rounded-pill px-2 py-1`}>
-          {trend === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
+          {trend === 'up' ? <i className="bi bi-arrowupright" style={{fontSize: '14px'}} ></i> : <i className="bi bi-arrowdownright" style={{fontSize: '14px'}} ></i>}
           {trendValue}%
         </div>
       </div>
@@ -149,7 +142,7 @@ const DashboardOverview = () => {
           <StatCard 
             title="Total Employees" 
             value={loading ? '...' : stats.total} 
-            icon={<Users size={24} />} 
+            icon={<i className="bi bi-people" style={{fontSize: '24px'}} ></i>} 
             trend="up" 
             trendValue="12" 
             
@@ -159,7 +152,7 @@ const DashboardOverview = () => {
           <StatCard 
             title="Present Today" 
             value={loading ? '...' : stats.present} 
-            icon={<UserCheck size={24} />} 
+            icon={<i className="bi bi-person-check" style={{fontSize: '24px'}} ></i>} 
             trend="up" 
             trendValue="5" 
             
@@ -169,7 +162,7 @@ const DashboardOverview = () => {
           <StatCard 
             title="Absent Today" 
             value={loading ? '...' : stats.absent} 
-            icon={<UserX size={24} />} 
+            icon={<i className="bi bi-userx" style={{fontSize: '24px'}} ></i>} 
             trend="down" 
             trendValue="2" 
             
@@ -179,7 +172,7 @@ const DashboardOverview = () => {
           <StatCard 
             title="Avg. Attendance" 
             value={loading ? '...' : stats.avg} 
-            icon={<TrendingUp size={24} />} 
+            icon={<i className="bi bi-trendingup" style={{fontSize: '24px'}} ></i>} 
             trend="up" 
             trendValue="3.1" 
             

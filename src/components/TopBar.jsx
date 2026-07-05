@@ -1,5 +1,5 @@
 import { useAuth } from '../hooks/useAuth';
-import { Bell, Search, User, Sun, Moon } from 'lucide-react';
+
 
 const TopBar = ({ title }) => {
   const { user } = useAuth();
@@ -11,7 +11,7 @@ const TopBar = ({ title }) => {
       <div className="d-flex align-items-center">
         <div className="input-group d-none d-md-flex me-3" style={{ width: '250px' }}>
           <span className={`input-group-text border-end-0 bg-transparent `}>
-            <Search size={18} className="text-secondary" />
+            <i className="bi bi-search text-secondary" style={{fontSize: '18px'}} ></i>
           </span>
           <input
             type="text"
@@ -23,7 +23,7 @@ const TopBar = ({ title }) => {
 
 
         <button className="btn btn-link text-secondary p-2 me-3 position-relative">
-          <Bell size={20} />
+          <i className="bi bi-bell" style={{fontSize: '20px'}} ></i>
           <span className="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
             <span className="visually-hidden">New alerts</span>
           </span>
@@ -35,7 +35,7 @@ const TopBar = ({ title }) => {
             <small className="text-secondary">Super Admin</small>
           </div>
           <div className="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
-            <User size={20} />
+            <i className="bi bi-person" style={{fontSize: '20px'}} ></i>
           </div>
         </div>
       </div>

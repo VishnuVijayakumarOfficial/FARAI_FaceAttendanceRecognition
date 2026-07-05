@@ -2,18 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../../lib/supabase';
 import { useAuth } from '../../../hooks/useAuth';
-import {
-  Calendar,
-  FileSpreadsheet,
-  Loader2,
-  UserCheck,
-  UserX,
-  ScanFace,
-  Clock,
-  ArrowLeft,
-  Sun,
-  Moon
-} from 'lucide-react';
+
 
 const EmployeeReports = () => {
   const { user, signOut } = useAuth();
@@ -107,7 +96,7 @@ const EmployeeReports = () => {
         <nav className="">
           <div className="">
             <div className="">
-              <ScanFace size={24} />
+              <i className="bi bi-scanface" style={{fontSize: '24px'}} ></i>
             </div>
             <div>
               <h1 className="">FAR<span className="">AI</span></h1>
@@ -120,7 +109,7 @@ const EmployeeReports = () => {
 
         {/* Back Button */}
         <button onClick={() => navigate('/employee/dashboard')} className="">
-          <ArrowLeft size={18} /> Back to Dashboard
+          <i className="bi bi-arrow-left" style={{fontSize: '18px'}} ></i> Back to Dashboard
         </button>
 
         {/* Header */}
@@ -134,7 +123,7 @@ const EmployeeReports = () => {
             disabled={filteredRecords.length === 0}
             className=" ${filteredRecords.length === 0 ? '' : ''}"
           >
-            <FileSpreadsheet size={20} />
+            <i className="bi bi-filespreadsheet" style={{fontSize: '20px'}} ></i>
             Export CSV
           </button>
         </div>
@@ -143,7 +132,7 @@ const EmployeeReports = () => {
         <div className="">
           <div className="">
             <div className="">
-              <UserCheck size={28} />
+              <i className="bi bi-person-check" style={{fontSize: '28px'}} ></i>
             </div>
             <div>
               <p className="">Present Days</p>
@@ -152,7 +141,7 @@ const EmployeeReports = () => {
           </div>
           <div className="">
             <div className="">
-              <UserX size={28} />
+              <i className="bi bi-userx" style={{fontSize: '28px'}} ></i>
             </div>
             <div>
               <p className="">Absent Days</p>
@@ -161,7 +150,7 @@ const EmployeeReports = () => {
           </div>
           <div className="">
             <div className="">
-              <ScanFace size={28} />
+              <i className="bi bi-scanface" style={{fontSize: '28px'}} ></i>
             </div>
             <div>
               <p className="">Attendance Rate</p>
@@ -173,7 +162,7 @@ const EmployeeReports = () => {
         {/* Filters */}
         <div className="">
           <div className="">
-            <Calendar className="" size={18} />
+            <i className="bi bi-calendar" style={{fontSize: '18px'}} ></i>
             <input
               type="date"
               className=""
@@ -183,7 +172,7 @@ const EmployeeReports = () => {
             />
           </div>
           <div className="">
-            <Calendar className="" size={18} />
+            <i className="bi bi-calendar" style={{fontSize: '18px'}} ></i>
             <input
               type="date"
               className=""
@@ -240,7 +229,7 @@ const EmployeeReports = () => {
                     <td className="">
                       {rec.login_time ? (
                         <div className="">
-                          <Clock size={14} className="" />
+                          <i className="bi bi-clock" style={{fontSize: '14px'}} ></i>
                           {new Date(rec.login_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
                         </div>
                       ) : (
@@ -249,13 +238,13 @@ const EmployeeReports = () => {
                     </td>
                     <td className="">
                       <div className="">
-                        <ScanFace size={11} />
+                        <i className="bi bi-scanface" style={{fontSize: '11px'}} ></i>
                         Face ID
                       </div>
                     </td>
                     <td className="">
                       <span className={rec.status === 'Present' ? '' : ''}>
-                        {rec.status === 'Present' ? <UserCheck size={11} /> : <UserX size={11} />}
+                        {rec.status === 'Present' ? <i className="bi bi-person-check" style={{fontSize: '11px'}} ></i> : <i className="bi bi-userx" style={{fontSize: '11px'}} ></i>}
                         {rec.status}
                       </span>
                     </td>

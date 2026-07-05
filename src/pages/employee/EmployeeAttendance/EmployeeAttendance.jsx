@@ -2,21 +2,7 @@ import { useRef, useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../../../lib/supabase';
 import { loadModels, getFaceDescriptor, compareFaces } from '../../../utils/faceApi';
-import {
-  Camera,
-  CheckCircle,
-  AlertCircle,
-  Loader2,
-  Clock,
-  ScanFace,
-  UserCheck,
-  RefreshCw,
-  ArrowLeft,
-  Lock,
-  Unlock,
-  Sun,
-  Moon
-} from 'lucide-react';
+
 import { useAuth } from '../../../hooks/useAuth';
 
 const EmployeeAttendance = () => {
@@ -211,7 +197,7 @@ const EmployeeAttendance = () => {
     return (
       <div className="">
         <div style={{ textAlign: 'center' }}>
-          <Loader2 className="" size={48} />
+          <i className="bi bi-arrow-clockwise" style={{fontSize: '48px'}} ></i>
           <p className="">Loading your profile...</p>
         </div>
       </div>
@@ -233,7 +219,7 @@ const EmployeeAttendance = () => {
         <nav className="">
           <div className="">
             <div className="">
-              <ScanFace size={24} />
+              <i className="bi bi-scanface" style={{fontSize: '24px'}} ></i>
             </div>
             <div>
               <h1 className="">FAR<span className="">AI</span></h1>
@@ -246,7 +232,7 @@ const EmployeeAttendance = () => {
 
         {/* Back Button */}
         <button onClick={() => navigate('/employee/dashboard')} className="">
-          <ArrowLeft size={18} /> Back to Dashboard
+          <i className="bi bi-arrow-left" style={{fontSize: '18px'}} ></i> Back to Dashboard
         </button>
 
         {/* Employee Profile Header */}
@@ -273,12 +259,12 @@ const EmployeeAttendance = () => {
 
               <div className="">
                 <span className=" ${faceRegistered ? '' : ''}">
-                  <ScanFace size={12} />
+                  <i className="bi bi-scanface" style={{fontSize: '12px'}} ></i>
                   {faceRegistered ? 'Face Registered' : 'Face Not Registered'}
                 </span>
                 {mode !== 'register' && (
                   <span className=" ${alreadyMarked ? '' : withinWindow ? '' : ''}">
-                    <Clock size={12} />
+                    <i className="bi bi-clock" style={{fontSize: '12px'}} ></i>
                     {alreadyMarked ? 'Present Today' : withinWindow ? 'Window Open' : 'Window Closed'}
                   </span>
                 )}
@@ -298,7 +284,7 @@ const EmployeeAttendance = () => {
 
         {modelsError && (
           <div className="">
-            <AlertCircle size={20} />
+            <i className="bi bi-alertcircle" style={{fontSize: '20px'}} ></i>
             <p className="">AI models failed to load. Please refresh the page.</p>
           </div>
         )}
@@ -307,9 +293,9 @@ const EmployeeAttendance = () => {
         {!hideRegistrationStep && !hideAttendanceStep && (
           <div className="">
             <div className=" ${faceRegistered ? '' : ''}">
-              <ScanFace size={18} />
+              <i className="bi bi-scanface" style={{fontSize: '18px'}} ></i>
               Step 1: Register Face
-              {faceRegistered && <CheckCircle size={16} />}
+              {faceRegistered && <i className="bi bi-check-circle" style={{fontSize: '16px'}} ></i>}
             </div>
             <div className=" ${faceRegistered ? '' : ''}" />
             <div className={`${''} ${
@@ -319,9 +305,9 @@ const EmployeeAttendance = () => {
                   ? ''
                   : ''
             }`}>
-              {faceRegistered ? <Unlock size={18} /> : <Lock size={18} />}
+              {faceRegistered ? <i className="bi bi-unlock" style={{fontSize: '18px'}} ></i> : <i className="bi bi-lock" style={{fontSize: '18px'}} ></i>}
               Step 2: Mark Attendance
-              {(attendSuccess || alreadyMarked) && <CheckCircle size={16} />}
+              {(attendSuccess || alreadyMarked) && <i className="bi bi-check-circle" style={{fontSize: '16px'}} ></i>}
             </div>
           </div>
         )}
@@ -333,7 +319,7 @@ const EmployeeAttendance = () => {
               <div className="">
                 <div className="">
                   <div className="">
-                    <Camera size={20} />
+                    <i className="bi bi-camera" style={{fontSize: '20px'}} ></i>
                   </div>
                   <div>
                     <p className="">Live Camera</p>
@@ -367,7 +353,7 @@ const EmployeeAttendance = () => {
                 {registerSuccess && (
                   <div className="">
                     <div className="">
-                      <CheckCircle size={50} />
+                      <i className="bi bi-check-circle" style={{fontSize: '50px'}} ></i>
                     </div>
                     <p className="">Face Registered!</p>
                   </div>
@@ -376,7 +362,7 @@ const EmployeeAttendance = () => {
                 {attendSuccess && (
                   <div className="">
                     <div className="">
-                      <UserCheck size={50} />
+                      <i className="bi bi-person-check" style={{fontSize: '50px'}} ></i>
                     </div>
                     <p className="">Attendance Marked!</p>
                   </div>
@@ -423,14 +409,14 @@ const EmployeeAttendance = () => {
 
                 {registerError && (
                   <div className="">
-                    <AlertCircle size={16} />
+                    <i className="bi bi-alertcircle" style={{fontSize: '16px'}} ></i>
                     <p className="">{registerError}</p>
                   </div>
                 )}
 
                 {registerSuccess && (
                   <div className="">
-                    <CheckCircle size={16} />
+                    <i className="bi bi-check-circle" style={{fontSize: '16px'}} ></i>
                     <p className="">Face registered! Step 2 is now unlocked.</p>
                   </div>
                 )}
@@ -449,11 +435,11 @@ const EmployeeAttendance = () => {
                   {registering ? (
                     <><div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div> Scanning Face...</>
                   ) : registerSuccess ? (
-                    <><CheckCircle size={20} /> Registered Successfully!</>
+                    <><i className="bi bi-check-circle" style={{fontSize: '20px'}} ></i> Registered Successfully!</>
                   ) : faceRegistered ? (
-                    <><RefreshCw size={20} /> Re-Register Face</>
+                    <><i className="bi bi-refreshcw" style={{fontSize: '20px'}} ></i> Re-Register Face</>
                   ) : (
-                    <><Camera size={20} /> Register My Face</>
+                    <><i className="bi bi-camera" style={{fontSize: '20px'}} ></i> Register My Face</>
                   )}
                 </button>
               </div>
@@ -483,15 +469,15 @@ const EmployeeAttendance = () => {
                     </p>
                   </div>
                   {faceRegistered ? (
-                    <Unlock size={16} className="" />
+                    <i className="bi bi-unlock" style={{fontSize: '16px'}} ></i>
                   ) : (
-                    <Lock size={16} className="" />
+                    <i className="bi bi-lock" style={{fontSize: '16px'}} ></i>
                   )}
                 </div>
 
                 {alreadyMarked && !attendSuccess && (
                   <div className="">
-                    <CheckCircle size={20} />
+                    <i className="bi bi-check-circle" style={{fontSize: '20px'}} ></i>
                     <div>
                       <p className="">Attendance already marked for today!</p>
                       <p className="">See you tomorrow 👋</p>
@@ -501,14 +487,14 @@ const EmployeeAttendance = () => {
 
                 {attendError && (
                   <div className="">
-                    <AlertCircle size={16} />
+                    <i className="bi bi-alertcircle" style={{fontSize: '16px'}} ></i>
                     <p className="">{attendError}</p>
                   </div>
                 )}
 
                 {attendSuccess && (
                   <div className="">
-                    <CheckCircle size={16} />
+                    <i className="bi bi-check-circle" style={{fontSize: '16px'}} ></i>
                     <p className="">Attendance marked! Redirecting...</p>
                   </div>
                 )}
@@ -525,13 +511,13 @@ const EmployeeAttendance = () => {
                   {verifying ? (
                     <><div className="spinner-border spinner-border-sm" role="status"><span className="visually-hidden">Loading...</span></div> Verifying Face...</>
                   ) : attendSuccess || alreadyMarked ? (
-                    <><CheckCircle size={20} /> Attendance Marked</>
+                    <><i className="bi bi-check-circle" style={{fontSize: '20px'}} ></i> Attendance Marked</>
                   ) : !faceRegistered ? (
-                    <><Lock size={20} /> Register Face First (Step 1)</>
+                    <><i className="bi bi-lock" style={{fontSize: '20px'}} ></i> Register Face First (Step 1)</>
                   ) : !withinWindow ? (
-                    <><Clock size={20} /> Outside Attendance Window</>
+                    <><i className="bi bi-clock" style={{fontSize: '20px'}} ></i> Outside Attendance Window</>
                   ) : (
-                    <><UserCheck size={20} /> Verify &amp; Mark Present</>
+                    <><i className="bi bi-person-check" style={{fontSize: '20px'}} ></i> Verify &amp; Mark Present</>
                   )}
                 </button>
               </div>

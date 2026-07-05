@@ -4,5 +4,86 @@ body {
   display: block;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #030712;
+  background-color: #050505;
+  color: #ffffff;
+}
+
+/* Animated Background for Glassmorphism */
+.glass-bg {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  overflow: hidden;
+  z-index: -1;
+  background: #030712;
+}
+
+.glass-bg::before,
+.glass-bg::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.5;
+  animation: float 20s infinite ease-in-out alternate;
+}
+
+.glass-bg::before {
+  width: 500px; height: 500px;
+  background: #00d2ff;
+  top: -150px; left: -100px;
+}
+
+.glass-bg::after {
+  width: 600px; height: 600px;
+  background: #3a7bd5;
+  bottom: -200px; right: -150px;
+  animation-delay: -5s;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(100px, 50px) scale(1.1); }
+  100% { transform: translate(-50px, 100px) scale(0.9); }
+}
+
+/* Ultra-Premium Glassmorphism */
+.glass-panel {
+  background: rgba(20, 25, 35, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+  border-radius: 20px;
+}
+
+.glass-input {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease;
+}
+
+.glass-input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.glass-input:focus {
+  background: rgba(0, 0, 0, 0.5) !important;
+  border-color: #00d2ff !important;
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.2) !important;
+}
+
+.text-glow {
+  color: #00d2ff;
+  text-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

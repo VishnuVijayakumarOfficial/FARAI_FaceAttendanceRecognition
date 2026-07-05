@@ -2,20 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../../lib/supabase';
 import { useAuth } from '../../../hooks/useAuth';
-import { 
-  Calendar, 
-  CheckCircle2, 
-  LogOut, 
-  User, 
-  TrendingUp, 
-  ScanFace,
-  Camera,
-  Loader2,
-  Sun,
-  Moon,
-  Edit,
-  Check
-} from 'lucide-react';
+
 
 const EmployeeDashboard = () => {
   const { user, signOut } = useAuth();
@@ -93,7 +80,7 @@ const EmployeeDashboard = () => {
           <div className="card-body p-4 p-md-5">
             <div className="d-flex justify-content-between align-items-start mb-4">
               <div className="d-flex align-items-center">
-                <ScanFace size={24} className="text-primary me-2" />
+                <i className="bi bi-scanface text-primary me-2" style={{fontSize: '24px'}} ></i>
                 <div>
                   <h4 className="mb-0 fw-bold">FAR<span className="text-primary">AI</span></h4>
                   <small className="text-secondary">Employee Portal</small>
@@ -103,7 +90,7 @@ const EmployeeDashboard = () => {
               <div>
                 
                 <button onClick={signOut} className="btn btn-outline-danger btn-sm p-2 rounded-circle">
-                  <LogOut size={16} />
+                  <i className="bi bi-box-arrow-right" style={{fontSize: '16px'}} ></i>
                 </button>
               </div>
             </div>
@@ -113,7 +100,7 @@ const EmployeeDashboard = () => {
                 <img src={employeeInfo.face_image} alt={employeeInfo.name} className="rounded-circle border border-4 border-light shadow-sm me-4" style={{width: '80px', height: '80px', objectFit: 'cover'}} />
               ) : (
                 <div className="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-4" style={{width: '80px', height: '80px'}}>
-                  <User size={32} />
+                  <i className="bi bi-person" style={{fontSize: '32px'}} ></i>
                 </div>
               )}
               <div>
@@ -133,10 +120,10 @@ const EmployeeDashboard = () => {
                 <div className="d-flex align-items-center mb-3 mb-md-0">
                   <div className="position-relative me-4">
                     <div className="bg-success text-white rounded-circle p-3 d-flex align-items-center justify-content-center shadow-sm">
-                      <Camera size={24} />
+                      <i className="bi bi-camera" style={{fontSize: '24px'}} ></i>
                     </div>
                     <div className="position-absolute bottom-0 end-0 bg-white rounded-circle p-1 shadow-sm text-success">
-                      <Check size={14} strokeWidth={4} />
+                      <i className="bi bi-check" style={{fontSize: '14px'}}  strokeWidth={4}></i>
                     </div>
                   </div>
                   <div>
@@ -145,7 +132,7 @@ const EmployeeDashboard = () => {
                     </h5>
                     <p className="text-secondary mb-1">Your face is registered and ready for attendance verification.</p>
                     <small className="text-muted d-flex align-items-center">
-                      <Calendar size={14} className="me-1" /> Last updated: {new Date().toLocaleDateString()}
+                      <i className="bi bi-calendar me-1" style={{fontSize: '14px'}} ></i> Last updated: {new Date().toLocaleDateString()}
                     </small>
                   </div>
                 </div>
@@ -153,7 +140,7 @@ const EmployeeDashboard = () => {
                   onClick={() => navigate('/employee/attendance?mode=register')}
                   className="btn btn-outline-secondary"
                 >
-                  <Edit size={16} className="me-2" />
+                  <i className="bi bi-pencil me-2" style={{fontSize: '16px'}} ></i>
                   Edit Face
                 </button>
               </>
@@ -161,7 +148,7 @@ const EmployeeDashboard = () => {
               <>
                 <div className="d-flex align-items-center mb-3 mb-md-0">
                   <div className="bg-warning bg-opacity-10 text-warning rounded-circle p-3 me-4">
-                    <Camera size={32} />
+                    <i className="bi bi-camera" style={{fontSize: '32px'}} ></i>
                   </div>
                   <div>
                     <h5 className="fw-bold mb-1">No Face Registered</h5>
@@ -172,7 +159,7 @@ const EmployeeDashboard = () => {
                   onClick={() => navigate('/employee/attendance?mode=register')}
                   className="btn btn-primary"
                 >
-                  <Camera size={16} className="me-2" />
+                  <i className="bi bi-camera me-2" style={{fontSize: '16px'}} ></i>
                   Register Face Now
                 </button>
               </>
@@ -195,7 +182,7 @@ const EmployeeDashboard = () => {
                       <p className="text-secondary mb-1">Today's Status</p>
                       {isTodayMarked() ? (
                         <h4 className="fw-bold text-success d-flex align-items-center mb-0">
-                          <CheckCircle2 size={24} className="me-2" />
+                          <i className="bi bi-checkcircle2 me-2" style={{fontSize: '24px'}} ></i>
                           Checked In
                         </h4>
                       ) : (
@@ -212,7 +199,7 @@ const EmployeeDashboard = () => {
                     onClick={() => navigate(isFaceRegistered() ? '/employee/attendance?mode=attendance' : '/employee/attendance?mode=register')}
                     className="btn btn-primary btn-lg w-100 rounded-pill shadow-sm"
                   >
-                    <Camera size={20} className="me-2" />
+                    <i className="bi bi-camera me-2" style={{fontSize: '20px'}} ></i>
                     Mark Attendance
                   </button>
                 </div>
@@ -227,7 +214,7 @@ const EmployeeDashboard = () => {
                 <div className="d-flex justify-content-between align-items-center mb-4">
                   <h5 className="card-title fw-bold mb-0">Attendance History</h5>
                   <div className="badge bg-primary bg-opacity-10 text-primary d-flex align-items-center py-2 px-3 rounded-pill">
-                    <TrendingUp size={16} className="me-1" />
+                    <i className="bi bi-trendingup me-1" style={{fontSize: '16px'}} ></i>
                     {attendanceRate()}% Rate
                   </div>
                 </div>
@@ -235,7 +222,7 @@ const EmployeeDashboard = () => {
                 <div className="flex-grow-1 overflow-auto pe-2">
                   {history.length === 0 ? (
                     <div className="text-center py-5">
-                      <Calendar size={48} className="text-secondary opacity-50 mb-3" />
+                      <i className="bi bi-calendar text-secondary opacity-50 mb-3" style={{fontSize: '48px'}} ></i>
                       <h6 className="fw-bold text-secondary">No attendance records yet.</h6>
                       <p className="text-muted small">Your history will appear here after your first check-in.</p>
                     </div>
@@ -243,7 +230,7 @@ const EmployeeDashboard = () => {
                     <div key={record.id} className="d-flex justify-content-between align-items-center py-3 border-bottom border-light">
                       <div className="d-flex align-items-center">
                         <div className={`p-2 rounded-3 me-3 ${record.status === 'Present' ? 'bg-success bg-opacity-10 text-success' : 'bg-danger bg-opacity-10 text-danger'}`}>
-                          <Calendar size={20} />
+                          <i className="bi bi-calendar" style={{fontSize: '20px'}} ></i>
                         </div>
                         <div>
                           <h6 className="fw-bold mb-1">

@@ -1,15 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabase';
-import {
-  Search,
-  Calendar,
-  FileSpreadsheet,
-  Loader2,
-  UserCheck,
-  UserX,
-  ScanFace,
-  Clock
-} from 'lucide-react';
+
 import { useAuth } from '../../../hooks/useAuth';
 
 const AttendanceReports = () => {
@@ -112,7 +103,7 @@ const AttendanceReports = () => {
           onClick={exportCSV}
           className=""
         >
-          <FileSpreadsheet size={20} />
+          <i className="bi bi-filespreadsheet" style={{fontSize: '20px'}} ></i>
           Export CSV
         </button>
       </div>
@@ -121,7 +112,7 @@ const AttendanceReports = () => {
       <div className="">
         <div className="">
           <div className="">
-            <UserCheck size={28} />
+            <i className="bi bi-person-check" style={{fontSize: '28px'}} ></i>
           </div>
           <div>
             <p className="">Present</p>
@@ -130,7 +121,7 @@ const AttendanceReports = () => {
         </div>
         <div className="">
           <div className="">
-            <UserX size={28} />
+            <i className="bi bi-userx" style={{fontSize: '28px'}} ></i>
           </div>
           <div>
             <p className="">Absent</p>
@@ -139,7 +130,7 @@ const AttendanceReports = () => {
         </div>
         <div className="">
           <div className="">
-            <ScanFace size={28} />
+            <i className="bi bi-scanface" style={{fontSize: '28px'}} ></i>
           </div>
           <div>
             <p className="">Attendance Rate</p>
@@ -153,7 +144,7 @@ const AttendanceReports = () => {
       {/* Filters */}
       <div className="">
         <div className="">
-          <Calendar className="" size={18} />
+          <i className="bi bi-calendar" style={{fontSize: '18px'}} ></i>
           <input
             type="date"
             className=""
@@ -162,7 +153,7 @@ const AttendanceReports = () => {
           />
         </div>
         <div className="">
-          <Search className="" size={18} />
+          <i className="bi bi-search" style={{fontSize: '18px'}} ></i>
           <input
             type="text"
             placeholder="Search by name, ID or department..."
@@ -241,7 +232,7 @@ const AttendanceReports = () => {
                   <td className="">
                     {rec.login_time ? (
                       <div className="">
-                        <Clock size={14} className="" />
+                        <i className="bi bi-clock" style={{fontSize: '14px'}} ></i>
                         {new Date(rec.login_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                       </div>
                     ) : (
@@ -251,14 +242,14 @@ const AttendanceReports = () => {
                   {/* Face AI */}
                   <td className="">
                     <div className={rec.face_descriptor ? '' : ''}>
-                      <ScanFace size={11} />
+                      <i className="bi bi-scanface" style={{fontSize: '11px'}} ></i>
                       {rec.face_descriptor ? 'Registered' : 'Not Set'}
                     </div>
                   </td>
                   {/* Status */}
                   <td className="">
                     <span className={rec.status === 'Present' ? '' : ''}>
-                      {rec.status === 'Present' ? <UserCheck size={11} /> : <UserX size={11} />}
+                      {rec.status === 'Present' ? <i className="bi bi-person-check" style={{fontSize: '11px'}} ></i> : <i className="bi bi-userx" style={{fontSize: '11px'}} ></i>}
                       {rec.status}
                     </span>
                   </td>
